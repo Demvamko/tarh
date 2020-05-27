@@ -18,6 +18,15 @@
     for(int z = from; z < CHK_LENGTH + to; z++) \
     for(int x = from; x < CHK_WIDTH + to; x++)
 
+#define SIDE_X_P_1 0
+#define SIDE_X_N_1 1
+#define SIDE_Y_P_1 2
+#define SIDE_Y_N_1 3
+#define SIDE_Z_P_1 4
+#define SIDE_Z_N_1 5
+
+void GenVerts(int x, int y, int z, int side, BlockVertices* verts, int* verts_len);
+
 static fvec3 cube_rects[6][6] = {
     {
         //X + 1
@@ -69,6 +78,9 @@ static fvec3 cube_rects[6][6] = {
         { 0.0f, 0.0f, 0.0f }
     }
 };
+
+Chunk* center;
+
 
 static int neighbour_lookup[] = {
       1,                        //X + 1
