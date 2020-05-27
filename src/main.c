@@ -30,7 +30,7 @@ int main() {
 
     // BlockVertices* verts = CubeGen();
 
-    Chunk c;
+    Chunk c = { 0 };
     ChunkGen(&c);
     int size = 0;
     BlockVertices* verts = ChunkToGeometry(&c, &size);

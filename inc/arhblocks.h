@@ -5,8 +5,9 @@
 
 typedef struct Chunk{
     char blocks[CHK_WIDTH * CHK_LENGTH * CHK_HEIGHT];
-    short x;
-    short y;
+    int x;
+    int y;
+    struct Chunk* sides[6];
 } Chunk;
 
 typedef struct BlockVertices{
@@ -19,6 +20,8 @@ void ChunkGen(Chunk* c);
 BlockVertices* ChunkToGeometry(Chunk* c, int* verts_len);
 BlockVertices* CubeGen();
 
+
+char GetBlock(Chunk* c, int x, int y, int z);
 Chunk* GetChunk(int x, int y);
 void SetChunk(int x, int y, Chunk* c);
-char GetBlock(int x, int y, int z);
+void GenVerts(int x, int y, int z, int side, BlockVertices* verts, int* verts_len);

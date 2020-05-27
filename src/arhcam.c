@@ -4,7 +4,7 @@
 #include <arhcam.h>
 #include <stdio.h>
 
-static vec3 pos = { 4, 3, 3 };
+static vec3 pos = { 4, 10, 3 };
 static vec3 rot = { -GLM_PI_2f, 0, 0 };
 
 static vec3 up = { 0, 1, 0 };
