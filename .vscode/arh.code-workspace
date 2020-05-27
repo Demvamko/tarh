@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\tarh"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.frag": "html",
+			"*.mod": "javascript",
+			"*.glsl": "glsl",
+			"stb_image.h": "c"
+		}
+	}
+}

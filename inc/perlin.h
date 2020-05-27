@@ -1,0 +1,1 @@
+double Perlin(double x, double y, double freq, int depth);
