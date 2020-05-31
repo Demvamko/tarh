@@ -16,11 +16,12 @@ layout (binding = 1) uniform u1{
     ivec2 cpos;
 };
 
-void main(){
-    vec3 npos = pos;
+layout (binding = 2) uniform u2{
+    vec3 ppos;
+};
 
-    npos.x += cpos.x * 16;
-    npos.z += cpos.y * 16;
+void main(){
+    vec3 npos = pos + ppos;
 
     gl_Position = projection * view * vec4(npos, 1);
     fuv = uv;    
@@ -46,7 +47,7 @@ void main(){
     )
         c = 0.7;
     
-    color = vec4(c, c, c, 1);
+    color = vec4(c, 0, 0, 0.5);
 
 }
 

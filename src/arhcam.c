@@ -16,7 +16,7 @@ static mat4 matrices[2];
 static Uniform uniform;
 
 void ArhCamInit(int w, int h){
-    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 100.0f, matrices[0]);
+    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
     glm_lookat(pos, (vec3) { 0, 0, 0 }, up, matrices[1]);
 
     uniform = CreateUniform(sizeof(mat4) * 2, matrices, 0);
@@ -26,7 +26,7 @@ void ArhCamInit(int w, int h){
 }
 
 void ArhCamChangeSize(int w, int h){
-    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 100.0f, matrices[0]);
+    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
     glViewport(0, 0, w, h);
 
     UpdateUniform(&uniform);
@@ -85,4 +85,12 @@ void ArhCamRotate(float x, float y){
     }, right);
 
     glm_vec3_cross(right, front, up); 
+}
+
+vec3* ArhCamGetPos(){
+    return &pos;
+}
+
+vec3* ArhCamGetFront(){
+    return &front;
 }

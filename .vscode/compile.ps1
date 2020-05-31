@@ -15,7 +15,8 @@ cl `
 bin\\window.exe `
 /Fo.\\bin\\ `
 /Fdbin\\vc140.pdb `
-src\\* `
+src\\*.c `
+src\\blocks\\*.c `
 glfw3dll.lib `
 opengl32.lib `
 /FI arh.h `

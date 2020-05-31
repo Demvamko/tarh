@@ -8,20 +8,19 @@ typedef struct Chunk{
     int x;
     int y;
     struct Chunk* sides[6];
+    struct Meta* meta;
 } Chunk;
 
-typedef struct BlockVertices{
-    fvec3 pos;
-    fvec2 uv;
-    fvec2 ao;
-} BlockVertices;
+void UpdateChunkMeta(Chunk* chunk, int x, int y, int z, char checked_neigbours);
+void GenerateChunkMeta(Chunk* chunk);
+void GenerateChunkGeom(Chunk* chunk);
+void RenderChunk(Chunk* chunk);
+struct Buffer CubeGeom();
 
-void ChunkGen(Chunk* c);
-BlockVertices* ChunkToGeometry(Chunk* c, int* verts_len);
-BlockVertices* CubeGen();
-
+Chunk* FindChunk(int x, int y);
+Chunk* LoadChunk(int x, int y);
 
 char GetBlock(Chunk* c, int x, int y, int z);
-Chunk* GetChunk(int x, int y);
-void SetChunk(int x, int y, Chunk* c);
-void GenVerts(int x, int y, int z, int side, BlockVertices* verts, int* verts_len);
+char GetBlockAny(int x, int y, int z);
+
+void ChunkGen(Chunk* c);

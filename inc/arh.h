@@ -27,3 +27,14 @@ typedef struct frect {
     float w;
     float h;
 } frect;
+
+typedef struct arhvec2{
+    int x;
+    int y;
+} arhvec2;
+
+typedef struct arhvec3{
+    int x;
+    int y;
+    int z;
+} arhvec3;
