@@ -1,10 +1,8 @@
+#include <cglm.h>
 #include <arhblocks.h>
 #include <arhblock_defines.h>
-#include <stdlib.h>
-#include <cglm.h>
-#include <math.h>
 
-#define SIGN(x) ((x) > 0) - ((x) < 0)
+#define sign(x) ((x) > 0) - ((x) < 0)
 
 vec3 raycast_hit;
 vec3 raycast_hit_prev;
@@ -17,7 +15,7 @@ void RayCastLine(vec3 start, vec3 end, int maxdist){
 
     for(int i = 0; i < 3; i++){
         curr[i] = floor(start[i]);
-        step[i] = SIGN(end[i] - start[i]);
+        step[i] = sign(end[i] - start[i]);
         delta[i] = 1.0f / fabs(end[i] - start[i]);
 
         float min = floor(start[i]);
@@ -43,7 +41,7 @@ void RayCastLine(vec3 start, vec3 end, int maxdist){
         glm_vec3_copy(raycast_hit, raycast_hit_prev);
         glm_vec3_copy(curr, raycast_hit);
 
-        if(GetBlockAny(curr[0], curr[1], curr[2]) != TYPE_AIR)
+        if(*GetBlockAbs(curr[0], curr[1], curr[2]) != TYPE_AIR)
             return;
     }
 }

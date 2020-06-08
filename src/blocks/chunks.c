@@ -6,6 +6,8 @@
 #define VIEW_DISTANCE 4
 #define MAX_CHK 16*16
 
+static char null = 0;
+
 Chunk* chunks[MAX_CHK] = { 0 };
 arhvec2 chunkcoords[MAX_CHK] = { 0 };
 
@@ -46,45 +48,52 @@ Chunk* LoadChunk(int x, int y){
     return c;
 }
 
-char GetBlock(Chunk* c, int x, int y, int z){
+char* GetBlockRel(Chunk* c, int x, int y, int z){
     if(!c)
-        return 0;
+        return &null;
 
     if(x < 0)
-        return GetBlock(c->sides[SIDE_X_N_1], x + CHK_WIDTH, y, z);
+        return GetBlockRel(c->sides[SIDE_X_N_1], x + CHK_DIM, y, z);
 
-    if(x >= CHK_WIDTH)
-        return GetBlock(c->sides[SIDE_X_P_1], x - CHK_WIDTH, y, z);
+    if(x >= CHK_DIM)
+        return GetBlockRel(c->sides[SIDE_X_P_1], x - CHK_DIM, y, z);
 
     if(y < 0)
-        return GetBlock(c->sides[SIDE_Y_N_1], x, y + CHK_WIDTH, z);
+        return GetBlockRel(c->sides[SIDE_Y_N_1], x, y + CHK_DIM, z);
 
-    if(y >= CHK_HEIGHT)
-        return GetBlock(c->sides[SIDE_Y_P_1], x, y - CHK_WIDTH, z);
+    if(y >= CHK_DIM)
+        return GetBlockRel(c->sides[SIDE_Y_P_1], x, y - CHK_DIM, z);
 
     if(z < 0)
-        return GetBlock(c->sides[SIDE_Z_N_1], x, y, z + CHK_WIDTH);
+        return GetBlockRel(c->sides[SIDE_Z_N_1], x, y, z + CHK_DIM);
 
-    if(z >= CHK_LENGTH)
-        return GetBlock(c->sides[SIDE_Z_P_1], x, y, z - CHK_WIDTH);
+    if(z >= CHK_DIM)
+        return GetBlockRel(c->sides[SIDE_Z_P_1], x, y, z - CHK_DIM);
 
-    return c->blocks[IDX(x,y,z)];
+    return &(c->blocks[IDX(x,y,z)]);
 }
 
-char GetBlockAny(int x, int y, int z){
+char* GetBlockAbs(int x, int y, int z){
     int cx = x / 16;
     int cy = z / 16;
     int bx = x % 16;
     int bz = z % 16;
 
     Chunk* c = FindChunk(cx, cy);
-    return GetBlock(c, bx, y, bz);
+    return GetBlockRel(c, bx, y, bz);
+}
+
+Chunk* GetChunkAbs(int x, int y){
+    int cx = x / 16;
+    int cy = y / 16;
+
+    return FindChunk(cx, cy);
 }
 
 void LoadNearPlayer(int x, int y){
-    int sx = x / CHK_WIDTH - VIEW_DISTANCE;
+    int sx = x / CHK_DIM - VIEW_DISTANCE;
     int ex = sx + VIEW_DISTANCE * 2;
-    int sy = y / CHK_LENGTH - VIEW_DISTANCE;
+    int sy = y / CHK_DIM - VIEW_DISTANCE;
     int ey = sy + VIEW_DISTANCE * 2;
 
     for(int cx = sx; cx < ex; cx++)

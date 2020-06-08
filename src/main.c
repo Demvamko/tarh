@@ -1,15 +1,17 @@
 #include <glew.h>
 #include <glfw3.h>
 #include <arhgl.h>
-#include <arhblocks.h>
 #include <cglm.h>
 #include <arhcam.h>
 #include <window.h>
+#include <arhblocks.h>
+#include <arhblock_defines.h>
 
 static void RecalcCamera();
 static void OnKey(GLFWwindow* window, int key, int code, int action, int mods);
 static void OnMouseMove(GLFWwindow* window, double x, double y);
 static void UpdateMovement();
+static void OnLButton(GLFWwindow* window, int button, int action, int mods);
 
 void RayCast(vec3 start, vec3 dir, int maxdist);
 
@@ -18,6 +20,7 @@ int main() {
 
     glfwSetKeyCallback(window, OnKey);
     glfwSetCursorPosCallback(window, OnMouseMove);
+    glfwSetMouseButtonCallback(window, OnLButton);
 
     ArhCamInit(1280, 720);
     ArhCamBindUniform();
@@ -120,14 +123,26 @@ static void OnMouseMove(GLFWwindow* window, double x, double y){
     ArhCamRotate(rx, ry);
 }
 
-extern vec3 raycast_hit;
-extern vec3 raycast_hit_prev;
-
 static void OnLButton(GLFWwindow* window, int button, int action, int mods){
     if(action != GLFW_PRESS)
         return;
 
     if(button == GLFW_MOUSE_BUTTON_LEFT){
-        
+        *GetBlockAbs(RX, RY, RZ) = TYPE_AIR;
+
+        Chunk* c = GetChunkAbs(RX, RZ);
+
+        GenerateChunkMeta(c);
+        GenerateChunkGeom(c);
     }
+
+    if(button == GLFW_MOUSE_BUTTON_RIGHT){
+        *GetBlockAbs(RPX, RPY, RPZ) = TYPE_STONE;
+
+        Chunk* c = GetChunkAbs(RPX, RPZ);
+
+        GenerateChunkMeta(c);
+        GenerateChunkGeom(c);
+    }
+
 }

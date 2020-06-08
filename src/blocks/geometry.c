@@ -7,7 +7,7 @@
 #define CHUNK_META_U_BIND 1
 
 typedef struct Meta{
-    char sides[CHK_WIDTH * CHK_LENGTH * CHK_HEIGHT];
+    char sides[CHK_DIM * CHK_DIM * CHK_DIM];
     int vert_count;
 
     Uniform uniform;
@@ -34,9 +34,9 @@ void PrepareTextures(){
 void GenerateChunkMeta(Chunk* chunk){
     Meta* meta = calloc(sizeof(Meta), 1);
 
-    ITER3D{
+    ITER {
         int idx = IDX(x, y, z);
-        char block = GetBlock(chunk, x, y, z);
+        char block = *GetBlockRel(chunk, x, y, z);
 
         if(block & TRAIT_TRANSPARENT)
             continue;
@@ -46,8 +46,8 @@ void GenerateChunkMeta(Chunk* chunk){
         }
             
 
-        ITERSIDES{
-            block = GetBlock(chunk, NX, NY, NZ);
+        SIDES {
+            block = *GetBlockRel(chunk, NX, NY, NZ);
 
             if(block & TRAIT_TRANSPARENT){
                 meta->sides[idx] = meta->sides[idx] | (1 << s);
@@ -61,46 +61,19 @@ void GenerateChunkMeta(Chunk* chunk){
     chunk->meta = meta;
 }
 
-void UpdateChunkMeta(Chunk* chunk, int x, int y, int z, char checked_neigbours){
-    Meta* meta = chunk->meta;
-
-    int idx = IDX(x, y, z);
-
-    char block = GetBlock(chunk, x, y, z);
-
-    ITERSIDES
-        if(meta->sides[idx] & (1 << s))
-            meta->vert_count -= 6;
-
-    meta->sides[idx] = 0;
-
-    if(!(block & TRAIT_TRANSPARENT))
-        ITERSIDES{
-            block = GetBlock(chunk, x, y, z);
-
-            if(block & TRAIT_TRANSPARENT){
-                meta->sides[idx] = meta->sides[idx] | (1 << s);
-                meta->vert_count += 6;
-            }
-        }
-
-    if(!checked_neigbours)
-        ITERSIDES UpdateChunkMeta(chunk, NX, NY, NZ, 1);
-}
-
 void GenerateChunkGeom(Chunk* chunk){
     Meta* meta = chunk->meta;
     Vert* verts = malloc(sizeof(Vert) * meta->vert_count);
 
     int len = 0;
 
-    ITER3D{
+    ITER {
         int idx = IDX(x, y, z);
 
-        ITERSIDES{
+        SIDES {
             if(meta->sides[idx] & (1 << s)){
-
-                for(int v = 0; v < 6; v++){ 
+                
+                VERTS { 
                     fvec3 vert = cube_rects[s][v];
 
                     verts[len] = (Vert) {
@@ -137,18 +110,16 @@ Buffer CubeGeom(){
 
     int len = 0;
 
-    ITERSIDES{
-        for(int v = 0; v < 6; v++){ 
-            fvec3 vert = cube_rects[s][v];
+    SIDES VERTS { 
+        fvec3 vert = cube_rects[s][v];
 
-            verts[len] = (Vert) {
-                (fvec3) { vert.x * 1.1f, vert.y * 1.1f, vert.z * 1.1f },
-                (fvec2) { vert.x, vert.y },
-                (fvec2) { 0.0f, 0.0f }
-            };
+        verts[len] = (Vert) {
+            (fvec3) { vert.x * 1.1f, vert.y * 1.1f, vert.z * 1.1f },
+            (fvec2) { vert.x, vert.y },
+            (fvec2) { 0.0f, 0.0f }
+        };
 
-            len++;
-        }
+        len++;
     }
 
     return CreateBuffer(sizeof(Vert), 36, GL_TRIANGLES, verts, ATTR_VERT);
