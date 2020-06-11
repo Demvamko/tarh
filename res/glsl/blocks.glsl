@@ -1,11 +1,12 @@
 #ifdef VERT
 
-layout(location = 0) in vec3 pos;
-layout(location = 1) in vec2 uv;
-layout(location = 2) in vec2 ao;
+layout(location = 0) in int pos;
+layout(location = 1) in int in_uv;
+layout(location = 2) in int type;
+layout(location = 3) in int in_ao;
 
-out vec2 fuv;
-out vec3 p;
+out float ao;
+out vec2 uv;
 
 layout (binding = 0) uniform u0{ 
     mat4x4 projection;
@@ -17,14 +18,22 @@ layout (binding = 1) uniform u1{
 };
 
 void main(){
-    vec3 npos = pos;
+    vec3 npos = vec3(
+        pos & 0x001f, //0000000000011111
+        (pos & 0x03E0) >> 5, //0000001111100000
+        (pos & 0x7C00) >> 10  //0111110000000000
+    );
 
     npos.x += cpos.x * 16;
     npos.z += cpos.y * 16;
 
     gl_Position = projection * view * vec4(npos, 1);
-    fuv = uv;    
-    p = pos;
+    ao = float(in_ao) / 16.0;
+
+    float u = in_uv & 1;
+    float v = (in_uv & 2) >> 1;
+
+    uv = vec2(u, v);
 }
 
 #endif
@@ -32,21 +41,18 @@ void main(){
 #ifdef FRAG
 
 out vec4 color;
-in vec2 fuv;
-in vec3 p;
+in float ao;
+in vec2 uv;
+
+layout (binding = 0) uniform sampler2D tex;
 
 void main(){
     // color = vec4(1, fuv.x, fuv.y, 1);
-    float c = 0.1;
+    vec4 result = texture(tex, uv);
 
-    if(
-        (mod(p.x, 1.0) > 0.95 || mod(p.x, 1.0) < 0.05) &&
-        (mod(p.y, 1.0) > 0.95 || mod(p.y, 1.0) < 0.05) ||
-        (mod(p.z, 1.0) > 0.95 || mod(p.z, 1.0) < 0.05)
-    )
-        c = 0.7;
-    
-    color = vec4(c, c, c, 1);
+    result.rgb = result.rgb * ao;
+
+    color = result;
 
 }
 

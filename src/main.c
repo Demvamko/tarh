@@ -25,16 +25,16 @@ int main() {
     ArhCamInit(1280, 720);
     ArhCamBindUniform();
 
-    Buffer buffs[16*16] = { 0 };
-
-    for(int y = 0; y < 16; y++)
-    for(int x = 0; x < 16; x++){
+    for(int y = 0; y < 4; y++)
+    for(int x = 0; x < 4; x++){
         Chunk* c = LoadChunk(x, y);
     }
 
     uint blocks_shader = CreateShader("./res/glsl/blocks.glsl");
     uint pointer_shader = CreateShader("./res/glsl/pointer.glsl");
     uint basic_shader = CreateShader("./res/glsl/basic.glsl");
+
+    CreateImgTexture("./res/img/granite.png", 0);
 
     Attributes attr[2] = {{ 2, GL_FLOAT }, { 0 }};
     Buffer crosshair = CreateBuffer(sizeof(float) * 2, 1, GL_POINTS, (float[]) { 0.0f, 0.0f }, attr);
@@ -44,8 +44,8 @@ int main() {
 
         glUseProgram(blocks_shader);
 
-        for(int y = 0; y < 16; y++)
-        for(int x = 0; x < 16; x++){
+        for(int y = 0; y < 4; y++)
+        for(int x = 0; x < 4; x++){
             RenderChunk(FindChunk(x, y));
         }
 
@@ -131,18 +131,14 @@ static void OnLButton(GLFWwindow* window, int button, int action, int mods){
         *GetBlockAbs(RX, RY, RZ) = TYPE_AIR;
 
         Chunk* c = GetChunkAbs(RX, RZ);
-
-        GenerateChunkMeta(c);
-        GenerateChunkGeom(c);
+        c->dirty = 1;
     }
 
     if(button == GLFW_MOUSE_BUTTON_RIGHT){
         *GetBlockAbs(RPX, RPY, RPZ) = TYPE_STONE;
 
         Chunk* c = GetChunkAbs(RPX, RPZ);
-
-        GenerateChunkMeta(c);
-        GenerateChunkGeom(c);
+        c->dirty = 1;
     }
 
 }

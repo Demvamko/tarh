@@ -46,6 +46,7 @@ typedef struct Attributes{
     uint normalize;
     uint stride;
     uint offset;
+    uint as_int;
 } Attributes;
 
 Buffer CreateBuffer(uint elemsize, uint count, uint render_type, void* data, Attributes* attribs);
@@ -53,6 +54,7 @@ void UpdateBuffer(Buffer* buffer, int offset, int size);
 void AppendBuffer(Buffer* buffer, void* data, int count);
 void PushBuffer(Buffer* buffer, void* data);
 void RenderBuffer(Buffer* buffer);
+void DeleteBuffer(Buffer* buffer);
 
 //SHADERS
 uint CreateShader(char* path);

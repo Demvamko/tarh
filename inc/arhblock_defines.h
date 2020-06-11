@@ -2,9 +2,9 @@
 #define IDX(x, y, z) (x + z * CHK_DIM + y * CHK_DIM * CHK_DIM)
 
 #define ITER \
-    for(int y = 0; y < CHK_DIM; y++) \
+    for(int y = 0, idx = 0; y < CHK_DIM; y++) \
     for(int z = 0; z < CHK_DIM; z++) \
-    for(int x = 0; x < CHK_DIM; x++)
+    for(int x = 0; x < CHK_DIM; x++, idx++)
 
 #define SIDES \
     for(int s = 0; s < 6; s++)
@@ -18,58 +18,6 @@
 #define SIDE_Y_N_1 3
 #define SIDE_Z_P_1 4
 #define SIDE_Z_N_1 5
-
-static fvec3 cube_rects[6][6] = {
-    {
-        //X + 1
-        { 1.0f, 1.0f, 0.0f }, 
-        { 1.0f, 1.0f, 1.0f }, 
-        { 1.0f, 0.0f, 1.0f }, 
-        { 1.0f, 0.0f, 1.0f }, 
-        { 1.0f, 0.0f, 0.0f }, 
-        { 1.0f, 1.0f, 0.0f }  
-    },{
-        //X - 1
-        { 0.0f, 1.0f, 0.0f }, 
-        { 0.0f, 1.0f, 1.0f }, 
-        { 0.0f, 0.0f, 1.0f }, 
-        { 0.0f, 0.0f, 1.0f }, 
-        { 0.0f, 0.0f, 0.0f }, 
-        { 0.0f, 1.0f, 0.0f }  
-    },{
-        //Y + 1
-        { 0.0f, 1.0f, 0.0f }, 
-        { 0.0f, 1.0f, 1.0f }, 
-        { 1.0f, 1.0f, 1.0f }, 
-        { 1.0f, 1.0f, 1.0f }, 
-        { 1.0f, 1.0f, 0.0f }, 
-        { 0.0f, 1.0f, 0.0f }  
-    },{
-        //Y - 1
-        { 0.0f, 0.0f, 0.0f }, 
-        { 0.0f, 0.0f, 1.0f }, 
-        { 1.0f, 0.0f, 1.0f }, 
-        { 1.0f, 0.0f, 1.0f }, 
-        { 1.0f, 0.0f, 0.0f }, 
-        { 0.0f, 0.0f, 0.0f }  
-    },{
-        //Z + 1
-        { 0.0f, 0.0f, 1.0f }, 
-        { 0.0f, 1.0f, 1.0f }, 
-        { 1.0f, 1.0f, 1.0f }, 
-        { 1.0f, 1.0f, 1.0f }, 
-        { 1.0f, 0.0f, 1.0f }, 
-        { 0.0f, 0.0f, 1.0f }
-    },{
-        //Z - 1
-        { 0.0f, 0.0f, 0.0f }, 
-        { 0.0f, 1.0f, 0.0f }, 
-        { 1.0f, 1.0f, 0.0f }, 
-        { 1.0f, 1.0f, 0.0f }, 
-        { 1.0f, 0.0f, 0.0f }, 
-        { 0.0f, 0.0f, 0.0f }
-    }
-};
 
 
 static int idx_offsets[] = {

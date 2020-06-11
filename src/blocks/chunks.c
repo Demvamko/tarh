@@ -39,6 +39,8 @@ Chunk* LoadChunk(int x, int y){
     c->x = x;
     c->y = y;
 
+    c->dirty = 1;
+
     ChunkGen(c);        
 
     chunks[chunklen] = c;

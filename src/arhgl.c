@@ -292,10 +292,19 @@ void SetBuffer(Buffer* buffer, void* data, int count, int idx){
     glUnmapNamedBuffer(buffer->vbo);
 }
 
+void DeleteBuffer(Buffer* buffer){
+    glDeleteBuffers(1, &buffer->vbo);
+    glDeleteVertexArrays(1, &buffer->vao);
+}
+
 static void SetAttributes(Attributes* attribs){
     for(int i = 0; attribs->type; i++, attribs++){
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, attribs->size, attribs->type, attribs->normalize, attribs->stride, (void*)attribs->offset);
+
+        if(attribs->as_int)
+            glVertexAttribIPointer(i, attribs->size, attribs->type, attribs->stride, (void*)attribs->offset);
+        else
+            glVertexAttribPointer(i, attribs->size, attribs->type, attribs->normalize, attribs->stride, (void*)attribs->offset);
     }
     glCheckError();
 }
@@ -303,7 +312,9 @@ static void SetAttributes(Attributes* attribs){
 void RenderBuffer(Buffer* buffer){
     glBindVertexArray(buffer->vao);
     
+    glCheckError();
     glDrawArrays(buffer->render_type, 0, buffer->count * buffer->render_per_elem);
+    glCheckError();
 }
 
 //SHADERS

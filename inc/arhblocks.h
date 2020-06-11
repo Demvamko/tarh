@@ -6,13 +6,11 @@ typedef struct Chunk{
     int x;
     int y;
     struct Chunk* sides[6];
-    struct Meta* meta;
+    struct Render* render;
+    char dirty;
 } Chunk;
 
-void GenerateChunkMeta(Chunk* chunk);
-void GenerateChunkGeom(Chunk* chunk);
 void RenderChunk(Chunk* chunk);
-struct Buffer CubeGeom();
 
 Chunk* FindChunk(int x, int y);
 Chunk* LoadChunk(int x, int y);
