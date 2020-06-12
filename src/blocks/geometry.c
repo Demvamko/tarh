@@ -4,6 +4,7 @@
 #include <arhblocks.h>
 #include <arhblock_defines.h>
 #include <arhblock_tables.h>
+#include <arhblock_types.h>
 
 #define CHUNK_META_U_BIND 1
 
@@ -13,6 +14,7 @@ typedef struct Vert{
     unsigned short z : 5;
     unsigned char u : 1;
     unsigned char v : 1;
+    unsigned char s : 3;
     unsigned char type;
     unsigned char light;
 } Vert;
@@ -57,14 +59,13 @@ Vert* GenerateChunkMesh(Chunk* chunk, int* out_len){
                 verts[len].y = vert.y + y;
                 verts[len].z = vert.z + z;
 
-                verts[len].type = block;
-
-                arhvec2 uv = uv_table[v];
+                arhvec2 uv = uv_table[s][v];
 
                 verts[len].u = uv.x;
                 verts[len].v = uv.y;
 
-                short pos = *(short*)(verts + len);
+                verts[len].s = s;
+                verts[len].type = block;
 
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;

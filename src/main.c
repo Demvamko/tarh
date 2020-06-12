@@ -6,6 +6,7 @@
 #include <window.h>
 #include <arhblocks.h>
 #include <arhblock_defines.h>
+#include <arhblock_types.h>
 
 static void RecalcCamera();
 static void OnKey(GLFWwindow* window, int key, int code, int action, int mods);
@@ -34,7 +35,7 @@ int main() {
     uint pointer_shader = CreateShader("./res/glsl/pointer.glsl");
     uint basic_shader = CreateShader("./res/glsl/basic.glsl");
 
-    CreateImgTexture("./res/img/granite.png", 0);
+    CreateImgTexture("./res/img/tileset.png", 0);
 
     Attributes attr[2] = {{ 2, GL_FLOAT }, { 0 }};
     Buffer crosshair = CreateBuffer(sizeof(float) * 2, 1, GL_POINTS, (float[]) { 0.0f, 0.0f }, attr);
@@ -135,7 +136,7 @@ static void OnLButton(GLFWwindow* window, int button, int action, int mods){
     }
 
     if(button == GLFW_MOUSE_BUTTON_RIGHT){
-        *GetBlockAbs(RPX, RPY, RPZ) = TYPE_STONE;
+        *GetBlockAbs(RPX, RPY, RPZ) = TYPE_DIRT;
 
         Chunk* c = GetChunkAbs(RPX, RPZ);
         c->dirty = 1;

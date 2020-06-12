@@ -32,8 +32,19 @@ void main(){
 
     float u = in_uv & 1;
     float v = (in_uv & 2) >> 1;
+    int s = (in_uv & 0x1C) >> 2;
 
-    uv = vec2(u, v);
+    int atlas_w = 16;
+    float inv_atlas_w = 1.0 / 16.0;
+
+    int idx = type * 6 + s;
+
+    int cx = int(mod(idx, atlas_w));
+    int cy = idx / atlas_w;
+
+    vec2 bin_uv = vec2(u + float(cx), v + float(cy)) * inv_atlas_w;
+
+    uv = bin_uv;
 }
 
 #endif

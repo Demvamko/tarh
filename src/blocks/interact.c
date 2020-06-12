@@ -1,6 +1,7 @@
 #include <cglm.h>
 #include <arhblocks.h>
 #include <arhblock_defines.h>
+#include <arhblock_types.h>
 
 #define sign(x) ((x) > 0) - ((x) < 0)
 

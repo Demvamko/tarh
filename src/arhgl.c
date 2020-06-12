@@ -161,7 +161,7 @@ void SetUniform(Uniform* uniform, void* data){
 Texture CreateImgTexture(const char* path, uint bind){   
     uint w, h, n;
     
-    stbi_set_flip_vertically_on_load(1);
+    // stbi_set_flip_vertically_on_load(1);
     char* data = stbi_load(path, &w, &h, &n, STBI_rgb_alpha);
 
     Texture tex;

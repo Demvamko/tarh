@@ -49,12 +49,3 @@ static int coord_offsets[] = {
 #define RPX raycast_hit_prev[0]
 #define RPY raycast_hit_prev[1]
 #define RPZ raycast_hit_prev[2]
-
-#define TRAIT_TRANSPARENT (char)0b10000000
-
-#define TYPE_AIR (0 | TRAIT_TRANSPARENT)
-#define TYPE_GLASS (1 | TRAIT_TRANSPARENT)
-
-#define TYPE_STONE 1
-#define TYPE_DIRT 2
-#define TYPE_BRICK 3

@@ -1,4 +1,5 @@
 #include <arhblocks.h>
+#include <arhblock_types.h>
 #include <arhblock_defines.h>
 #include <stdlib.h>
 

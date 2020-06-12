@@ -1,0 +1,9 @@
+
+#define TRAIT_TRANSPARENT (char)0b10000000
+
+#define TYPE_AIR (0 | TRAIT_TRANSPARENT)
+#define TYPE_GLASS (1 | TRAIT_TRANSPARENT)
+
+#define TYPE_STONE 0
+#define TYPE_DIRT 1
+#define TYPE_BRICK 2
