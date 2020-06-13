@@ -1,4 +1,4 @@
-static arhvec3 cube_rects[6][6] = {
+static const arhvec3 cube_rects[6][6] = {
     {
         //X + 1
         { 1, 0, 0 }, 
@@ -50,7 +50,7 @@ static arhvec3 cube_rects[6][6] = {
     }
 };
 
-static arhvec3 occlusion_table[6][6][3] = {
+static const arhvec3 occlusion_table[6][6][3] = {
     { //X + 1
         { // 1 0 0
             {  1, -1, -1 },
@@ -246,7 +246,7 @@ static arhvec3 occlusion_table[6][6][3] = {
     }
 };
 
-static arhvec2 uv_table[6][6] = {
+static const arhvec2 uv_table[6][6] = {
     {
         { 1, 1 },
         { 0, 1 },

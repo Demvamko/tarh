@@ -7,6 +7,7 @@
 #include <arhblocks.h>
 #include <arhblock_defines.h>
 #include <arhblock_types.h>
+#include <ui.h>
 
 static void RecalcCamera();
 static void OnKey(GLFWwindow* window, int key, int code, int action, int mods);
@@ -17,6 +18,9 @@ static void OnLButton(GLFWwindow* window, int button, int action, int mods);
 void RayCast(vec3 start, vec3 dir, int maxdist);
 
 int main() {
+    int c = 0;
+    UI_LoadFile("./res/ui/game.ui", &c);
+
     InitWindow();
 
     glfwSetKeyCallback(window, OnKey);

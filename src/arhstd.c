@@ -3,7 +3,7 @@
 #include <string.h>
 #include "arhstd.h"
 
-void* ArhLoadFile(char* path, int* outsize){
+void* ArhLoadFile(const char* path, int* outsize){
     FILE* file = fopen(path, "rb");
 
     fseek(file, 0, SEEK_END);
