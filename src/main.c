@@ -18,9 +18,6 @@ static void OnLButton(GLFWwindow* window, int button, int action, int mods);
 void RayCast(vec3 start, vec3 dir, int maxdist);
 
 int main() {
-    int c = 0;
-    UI_LoadFile("./res/ui/game.ui", &c);
-
     InitWindow();
 
     glfwSetKeyCallback(window, OnKey);

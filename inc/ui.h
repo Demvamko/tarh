@@ -4,8 +4,8 @@
 #define TYPE_TABLE 2
 
 #define ALIGN_START 0
-#define ALIGN_CENTER 1
-#define ALIGN_END 2
+#define ALIGN_END 1
+#define ALIGN_CENTER 2
 
 #define DISPLAY_OVERFLOW 0
 #define DISPLAY_FIT 1
@@ -15,8 +15,10 @@
 #define POSITION_ABSOLUTE 2
 
 typedef struct Tag{
+    int client[4];
+
     float anchors[4];
-    float rect[4];
+    int rect[4];
 
     char depth;
     char* text;
@@ -35,3 +37,5 @@ typedef struct Tag{
 Tag* UI_LoadFile(char* path, int* out_count);
 Tag* UI_ParseFile(char* file, int size, int* out_count);
 void UI_ParseTag(Tag* tag, char* line, Tag* last);
+
+void UI_TagsToBuffer(Tag* tags, int count, int* viewport);

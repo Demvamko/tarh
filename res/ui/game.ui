@@ -1,9 +1,6 @@
-:: row center anchors="0 0 1 0.1"
-    :: absolute="0 0 100 100"
-        Testing
-    :: size="16 16"
-        Testing 2
-
-:: anchors="0 1 1 -0.1" repeat="item in dict"
-    ::
-        { item }
+::
+    :: row anchors="0 0.9 1 1"
+        :: size="16 16"
+        :: size="16 16"
+        :: size="16 16"
+        :: size="16 16"

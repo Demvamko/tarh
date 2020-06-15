@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <arhstd.h>
-#include <rect.h>
 #include <ui.h>
 
 const char delimiters[] = " \"";
@@ -18,13 +17,19 @@ Tag* UI_LoadFile(char* path, int* out_count){
     char* file = ArhLoadFile(path, &size);
 
     int count;
-    return UI_ParseFile(file, size, &count);
+    Tag* tags = UI_ParseFile(file, size, &count);
+
+    *out_count = count;
+
+    return tags;
 }
 
 Tag* UI_ParseFile(char* file, int size, int* out_count){
-    Tag* tags = calloc(1024, sizeof(Tag));
-    Tag* last = 0;
     int cur = 0;
+    int max = 16;
+
+    Tag* tags = calloc(max, sizeof(Tag));
+    Tag* last = 0;
 
     char* line = file;
 
@@ -51,6 +56,11 @@ Tag* UI_ParseFile(char* file, int size, int* out_count){
             line = file + i + 1;
             last = tags + cur;
             cur++;
+        }
+
+        if(cur > max){
+            max = max * 2;
+            tags = realloc(tags, sizeof(Tag) * max);
         }
     }
 
