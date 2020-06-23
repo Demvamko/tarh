@@ -13,7 +13,7 @@ layout (binding = 0) uniform u0{
     mat4x4 view;
 };
 
-layout (binding = 1) uniform u1{
+layout (binding = 3) uniform u1{
     ivec2 cpos;
 };
 

@@ -1,0 +1,3 @@
+
+void InitCrosshair();
+void RenderCrosshair();

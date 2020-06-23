@@ -2,6 +2,9 @@
 
 typedef unsigned int uint;
 
+#define lenof(arr) (sizeof(arr) / sizeof(arr[0]))
+#define GL_UBYTE GL_UNSIGNED_BYTE
+
 typedef struct fvec4{
     float x;
     float y;

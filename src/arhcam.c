@@ -4,24 +4,38 @@
 #include <arhcam.h>
 #include <stdio.h>
 
-static vec3 pos = { 4, 10, 3 };
-static vec3 rot = { -GLM_PI_2f, 0, 0 };
+vec3 camera_pos = { 4, 10, 3 };
+vec3 camera_rot = { -GLM_PI_2f, 0, 0 };
 
-static vec3 up = { 0, 1, 0 };
-static vec3 right = { 1, 0, 0 };
-static vec3 front = { 0, 0, 1 };
+vec3 camera_up = { 0, 1, 0 };
+vec3 camera_right = { 1, 0, 0 };
+vec3 camera_front = { 0, 0, 1 };
+
+int camera_resolution[2];
 
 static mat4 matrices[2];
 
 static Uniform uniform;
+static Uniform resolution;
 
-void ArhCamInit(int w, int h){
+#define pos   camera_pos
+#define rot   camera_rot
+#define up    camera_up
+#define right camera_right
+#define front camera_front
+#define res   camera_resolution
+
+void InitCamera(int w, int h){
     glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
     glm_lookat(pos, (vec3) { 0, 0, 0 }, up, matrices[1]);
 
-    uniform = CreateUniform(sizeof(mat4) * 2, matrices, 0);
+    res[0] = w;
+    res[1] = h;
 
-    ArhCamRotate(0,0);
+    uniform = CreateUniform(sizeof(mat4) * 2, matrices, 0);
+    resolution = CreateUniform(sizeof(int) * 2, res, 1);
+
+    RotateCamera(0,0);
     ArhCamUpdateView();
 }
 
@@ -29,7 +43,11 @@ void ArhCamChangeSize(int w, int h){
     glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
     glViewport(0, 0, w, h);
 
+    res[0] = w;
+    res[1] = h;
+
     UpdateUniform(&uniform);
+    UpdateUniform(&resolution);
 }
 
 void ArhCamUpdateView(){
@@ -44,7 +62,7 @@ void ArhCamBindUniform(){
     BindUniform(&uniform);
 }
 
-void ArhCamMove(vec3 v){
+void MoveCamera(float* v){
     vec3 movement;
 
     if(v[0]){
@@ -59,9 +77,11 @@ void ArhCamMove(vec3 v){
         glm_vec3_mul(up, (vec3){ 0, v[2], 0 }, movement);
         glm_vec3_add(pos, movement, pos);
     }
+
+    ArhCamUpdateView();
 }
 
-void ArhCamRotate(float x, float y){
+void RotateCamera(float x, float y){
 
     rot[0] += x;
     rot[1] += y;
@@ -85,12 +105,4 @@ void ArhCamRotate(float x, float y){
     }, right);
 
     glm_vec3_cross(right, front, up); 
-}
-
-vec3* ArhCamGetPos(){
-    return &pos;
-}
-
-vec3* ArhCamGetFront(){
-    return &front;
 }

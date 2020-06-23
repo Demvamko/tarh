@@ -7,12 +7,11 @@
 #define ALIGN_END 1
 #define ALIGN_CENTER 2
 
-#define DISPLAY_OVERFLOW 0
-#define DISPLAY_FIT 1
-
 #define POSITION_DEFAULT 0
 #define POSITION_ANCHORED 1
 #define POSITION_ABSOLUTE 2
+
+#define RES_TYPE_TEX 0
 
 typedef struct Tag{
     int client[4];
@@ -23,19 +22,25 @@ typedef struct Tag{
     char depth;
     char* text;
 
+    unsigned char image;
+    unsigned char color[4];
+
     unsigned char type: 2;
     unsigned char alignment: 2;
-    unsigned char display: 1;
     unsigned char position: 2;
+    unsigned char visible: 1;
 
     char custom_tag[16];
+
+    int index;
 
     struct Tag* parent;
     struct Tag* sibling;
 } Tag;
 
-Tag* UI_LoadFile(char* path, int* out_count);
-Tag* UI_ParseFile(char* file, int size, int* out_count);
-void UI_ParseTag(Tag* tag, char* line, Tag* last);
 
-void UI_TagsToBuffer(Tag* tags, int count, int* viewport);
+void InitUI();
+void RenderUI();
+void UI_RefreshParents();
+void UI_RefreshChildClients(Tag* parent);
+void UI_RefreshVerts(Tag* tag);

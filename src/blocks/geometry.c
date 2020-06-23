@@ -6,7 +6,7 @@
 #include <arhblock_tables.h>
 #include <arhblock_types.h>
 
-#define CHUNK_META_U_BIND 1
+#define CHUNK_META_U_BIND 3
 
 typedef struct Vert{
     unsigned short x : 5;

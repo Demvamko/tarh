@@ -1,3 +1,4 @@
+#include <glew.h>
 #include <stdlib.h>
 #include <arhgl.h>
 #include <arhblocks.h>
@@ -102,4 +103,25 @@ void LoadNearPlayer(int x, int y){
     for(int cy = sy; cy < ey; cy++){
         LoadChunk(cx, cy);
     }
+}
+
+static uint shader;
+static Texture texture;
+
+void InitChunks(){
+    shader = CreateShader("./res/glsl/blocks.glsl");
+    texture = CreateImgTexture("./res/img/tileset.png", 0);
+
+    for(int y = 0; y < 4; y++)
+    for(int x = 0; x < 4; x++){
+        LoadChunk(x, y);
+    }
+}
+
+void RenderChunks(){
+    glUseProgram(shader);
+    BindTexture(&texture);   
+
+    for(int i = 0; i < chunklen; i++)
+        RenderChunk(chunks[i]);
 }

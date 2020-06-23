@@ -12,6 +12,9 @@ typedef struct Chunk{
 
 void RenderChunk(Chunk* chunk);
 
+void InitChunks();
+void RenderChunks();
+
 Chunk* FindChunk(int x, int y);
 Chunk* LoadChunk(int x, int y);
 Chunk* GetChunkAbs(int x, int y);
@@ -20,6 +23,8 @@ char* GetBlockRel(Chunk* c, int x, int y, int z);
 char* GetBlockAbs(int x, int y, int z);
 
 void ChunkGen(Chunk* c);
+
+void RayCast(float* start, float* dir, int maxdist);
 
 extern float raycast_hit[3];
 extern float raycast_hit_prev[3];

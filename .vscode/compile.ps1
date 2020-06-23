@@ -17,7 +17,6 @@ bin\\window.exe `
 /Fdbin\\vc140.pdb `
 src\\*.c `
 src\\blocks\\*.c `
-src\\ui\\*.c `
 glfw3dll.lib `
 opengl32.lib `
 /FI arh.h `
