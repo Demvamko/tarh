@@ -34,7 +34,7 @@ static Tag tags[2] = {
         {
             .anchors = { 0.0f, 0.0f, 1.0f, 0.05f },
             .position = POSITION_ANCHORED,
-            .color = { 255, 255, 255, 255 },
+            .color = { 25, 25, 25, 255 },
             .depth = 1,
             .index = 1,
             .visible = 1

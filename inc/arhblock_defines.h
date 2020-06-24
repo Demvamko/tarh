@@ -41,11 +41,3 @@ static int coord_offsets[] = {
 #define NX x + coord_offsets[s * 3]
 #define NY y + coord_offsets[s * 3 + 1]
 #define NZ z + coord_offsets[s * 3 + 2]
-
-#define RX raycast_hit[0]
-#define RY raycast_hit[1]
-#define RZ raycast_hit[2]
-
-#define RPX raycast_hit_prev[0]
-#define RPY raycast_hit_prev[1]
-#define RPZ raycast_hit_prev[2]

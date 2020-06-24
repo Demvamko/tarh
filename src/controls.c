@@ -2,7 +2,7 @@
 #include <arhcam.h>
 #include <window.h>
 #include <controls.h>
-#include <arhblocks.h>
+#include <voxels.h>
 #include <arhblock_types.h>
 #include <arhblock_defines.h>
 
@@ -87,20 +87,18 @@ void OnMouseButton(GLFWwindow* window, int button, int action, int mods){
     if(action != GLFW_PRESS)
         return;
 
-    RayCast(camera_pos, camera_front, 50);
+    #define ARGS(vec) vec[0], vec[1], vec[2]
 
-    if(button == GLFW_MOUSE_BUTTON_LEFT){
-        *GetBlockAbs(RX, RY, RZ) = TYPE_AIR;
+    int rayhit[3] = { 0 };
+    int rayprev[3] = { 0 };
 
-        Chunk* c = GetChunkAbs(RX, RZ);
-        c->dirty = 1;
-    }
+    Voxel_RayCast_Vector(camera_pos, camera_front, 50, rayhit, rayprev);
 
-    if(button == GLFW_MOUSE_BUTTON_RIGHT){
-        *GetBlockAbs(RPX, RPY, RPZ) = TYPE_DIRT;
+    if(button == GLFW_MOUSE_BUTTON_LEFT)
+        Voxel_Set(ARGS(rayhit), TYPE_AIR);
 
-        Chunk* c = GetChunkAbs(RPX, RPZ);
-        c->dirty = 1;
-    }
+    if(button == GLFW_MOUSE_BUTTON_RIGHT)
+        Voxel_Set(ARGS(rayprev), TYPE_DIRT);
 
+    #undef ARGS
 }

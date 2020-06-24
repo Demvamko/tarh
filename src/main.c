@@ -2,7 +2,7 @@
 #include <glfw3.h>
 #include <arhcam.h>
 #include <window.h>
-#include <arhblocks.h>
+#include <voxels.h>
 #include <controls.h>
 #include <misc.h>
 #include <ui.h>
@@ -12,7 +12,7 @@ int main() {
     InitControls(window);
     InitCamera(1280, 720);
     
-    InitChunks();
+    InitVoxels();
     InitCrosshair();
 
     InitUI();
@@ -20,7 +20,7 @@ int main() {
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        RenderChunks();
+        RenderVoxels();
         RenderCrosshair();
         RenderUI();
         
