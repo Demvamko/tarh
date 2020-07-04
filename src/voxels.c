@@ -3,9 +3,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <arhgl.h>
-#include <arhblock_defines.h>
-#include <arhblock_tables.h>
-#include <arhblock_types.h>
+#include <voxel_defines.h>
+#include <voxel_tables.h>
+#include <voxel_types.h>
 
 #define CHUNK_META_U_BIND 3
 

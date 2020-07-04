@@ -11,6 +11,7 @@ cl `
 /I ./dep `
 /I ./dep/cglm/include/cglm `
 /I ./dep/glfw/include/GLFW `
+/I ./dep/freetype/include `
 /Fe: `
 bin\\window.exe `
 /Fo.\\bin\\ `
@@ -18,7 +19,9 @@ bin\\window.exe `
 src\\*.c `
 glfw3dll.lib `
 opengl32.lib `
+freetype.lib `
 /FI arh.h `
 /link `
+/LIBPATH:"C:\Users\JSGuru\Desktop\Files\projects\tarh\dep\freetype\objs\x64\Debug" `
 /LIBPATH:"C:\Program Files (x86)\GLFW\lib" `
 /LIBPATH:".\\lib";

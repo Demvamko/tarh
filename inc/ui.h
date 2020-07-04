@@ -20,9 +20,14 @@ typedef struct Tag{
     int rect[4];
 
     char depth;
-    char* text;
 
-    unsigned char image;
+    char* text_str;
+    short text_len;
+    char font_size;
+
+    struct Text* text;
+
+    float uv[4];
     unsigned char color[4];
 
     unsigned char type: 2;
@@ -35,12 +40,20 @@ typedef struct Tag{
     int index;
 
     struct Tag* parent;
+    struct Tag* child;
     struct Tag* sibling;
 } Tag;
 
+extern int UI_RECT_TABLE[6][2];
+extern int UI_UV_TABLE[6][2];
 
 void InitUI();
 void RenderUI();
+
 void UI_RefreshParents();
 void UI_RefreshChildClients(Tag* parent);
 void UI_RefreshVerts(Tag* tag);
+
+void UI_Text_CreateFont(const char* path);
+void UI_Text_RefreshVerts(Tag* tag);
+void UI_Text_CreateText(Tag* tag);

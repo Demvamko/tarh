@@ -3,8 +3,8 @@
 #include <window.h>
 #include <controls.h>
 #include <voxels.h>
-#include <arhblock_types.h>
-#include <arhblock_defines.h>
+#include <voxel_types.h>
+#include <voxel_defines.h>
 
 static float lastx = -1;
 static float lasty = -1;
