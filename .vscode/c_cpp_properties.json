@@ -18,7 +18,7 @@
             "cppStandard": "c++17",
             "intelliSenseMode": "msvc-x64",
             "forcedInclude": [
-                "${workspaceFolder}/inc/arh.h"
+                "${workspaceFolder}/inc/arh/arh.h"
             ]
         }
     ],

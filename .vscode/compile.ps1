@@ -17,10 +17,14 @@ bin\\window.exe `
 /Fo.\\bin\\ `
 /Fdbin\\vc140.pdb `
 src\\*.c `
+src\\arh\\*.c `
+src\\game\\*.c `
+src\\lib\\*.c `
+src\\voxel\\*.c `
 glfw3dll.lib `
 opengl32.lib `
 freetype.lib `
-/FI arh.h `
+/FI arh\\arh.h `
 /link `
 /LIBPATH:"C:\Users\JSGuru\Desktop\Files\projects\tarh\dep\freetype\objs\x64\Debug" `
 /LIBPATH:"C:\Program Files (x86)\GLFW\lib" `
