@@ -1,6 +1,6 @@
 #include <glfw3.h>
-#include <arh/arhcam.h>
-#include <arh/arhwin.h>
+#include <arh/cam.h>
+#include <arh/win.h>
 #include <game/controls.h>
 #include <voxel/voxels.h>
 #include <voxel/types.h>

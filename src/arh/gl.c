@@ -1,8 +1,8 @@
 #include <lib/glew.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <arh/arhgl.h>
-#include <arh/arhstd.h>
+#include <arh/gl.h>
+#include <arh/std.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <lib/stb_image.h>
@@ -49,6 +49,7 @@ uint glCheckError_(const char *file, int line){
             case 0x0506: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
         }
         printf("%s:%d : %s\n", file, line, error);
+        scanf("%u", &errorCode);
     }
     return errorCode;
 }
@@ -242,10 +243,11 @@ ARH_DEF_TYPE_PAIR ARH_DEF_TYPE_PAIRS[3] = {
 const char* version = "#version 440\n";
 
 static int CompileFailed(uint shade);
+static int LinkFailed(uint prog);
 
 uint CreateShader(char* path){
     uint size;
-    char* mem = ArhLoadFile(path, &size);
+    char* mem = Arh_LoadFile(path, &size);
 
     uint prog = glCreateProgram();
 
@@ -271,6 +273,44 @@ uint CreateShader(char* path){
     return prog;
 }
 
+uint CreateShaderRes(int* rvert, int* rfrag){
+    uint prog = glCreateProgram();
+
+    char* source = Arh_GetResource(rvert[0]);
+    int len = rvert[1] - rvert[0];
+
+    uint vert = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vert, 1, &source, &len);
+    glCompileShader(vert);
+
+    if(CompileFailed(vert))
+        return 0;
+    
+    source = Arh_GetResource(rfrag[0]);
+    len = rfrag[1] - rfrag[0];    
+
+    uint frag = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(frag, 1, &source, &len);
+    glCompileShader(frag);
+
+    if(CompileFailed(frag))
+        return 0;
+
+    glAttachShader(prog, vert);
+    glAttachShader(prog, frag);
+
+    glCheckError();
+
+    glLinkProgram(prog);
+
+    if(LinkFailed(prog))
+        return 0;
+
+    glCheckError();
+    
+    return prog;
+}
+
 static int CompileFailed(uint shade){
     GLint compiled = 0;
     glGetShaderiv(shade, GL_COMPILE_STATUS, &compiled);
@@ -283,6 +323,22 @@ static int CompileFailed(uint shade){
     printf("%s\n", err);
 
     glCheckError();
+    return 1;
+}
+
+static int LinkFailed(uint prog){
+    GLint linked = 0;
+    glGetProgramiv(prog, GL_LINK_STATUS, &linked);
+    
+    if(linked)
+        return 0;
+
+    char err[2048];
+    glGetProgramInfoLog(prog, 2048, NULL, err);
+    printf("%s\n", err);
+
+    glCheckError();
+
     return 1;
 }
 

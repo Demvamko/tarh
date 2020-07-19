@@ -1,3 +1,5 @@
+//pack --type=image --atlas="VOXEL" --path="./res/img/block/*.png"
+
 typedef struct Voxel{
     uint image;
     uint flags;

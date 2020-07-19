@@ -2,6 +2,7 @@
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
+typedef unsigned short ushort;
 
 #define lenof(arr) (sizeof(arr) / sizeof(arr[0]))
 #define GL_UBYTE GL_UNSIGNED_BYTE

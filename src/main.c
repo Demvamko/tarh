@@ -1,28 +1,25 @@
 #include <lib/glew.h>
 #include <glfw3.h>
-#include <arh/arhcam.h>
-#include <arh/arhwin.h>
+#include <arh/cam.h>
+#include <arh/win.h>
 #include <voxel/voxels.h>
 #include <game/controls.h>
-#include <arh/arhui.h>
-#include <arh/arhres.h>
+#include <arh/ui.h>
+#include <arh/std.h>
 
 int main() {
     InitWindow();
     InitControls(window);
     InitCamera(1280, 720);
     
-    InitResources();
+    Arh_InitResources();
     InitVoxels();
-
-    InitUI();
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         RenderVoxels();
-        RenderUI();
-        
+
         ControlsUpdate();
 
         glfwSwapBuffers(window);        

@@ -1,9 +1,9 @@
 #include <lib/glew.h>
 #include <cglm.h>
-#include <arh/arhgl.h>
-#include <arh/arhcam.h>
-#include <arh/arhui.h>
-#include <arh/arhres.h>
+#include <arh/gl.h>
+#include <arh/cam.h>
+#include <arh/ui.h>
+#include <arh/std.h>
 #include <ext/pack.h>
 
 typedef struct Vert{
@@ -28,8 +28,6 @@ static Tag* hot;
 
 static int max = 1;
 static int count = 0;
-
-//pack --type=image --atlas="UI" --image="./res/img/block/*.png" --id="RES_IMAGE_TEST"
 
 void InitUI(){
 }
@@ -109,7 +107,7 @@ void UI_RefreshVerts(Tag* tag){
     #define FOR(x) for(int i = 0; i < x; i++)
 
     Vert* vert = tag->vertices;
-    float* uv = Res_Get(ATLAS_IMG_acacia_bark_top);
+    float* uv = Arh_GetResource(ATLAS_IMG_acacia_tree);
 
     for(int v = 0; v < 6; v++, vert++){
         FOR(2) vert->pos[i] = tag->client[UI_RECT_TABLE[v][i]];

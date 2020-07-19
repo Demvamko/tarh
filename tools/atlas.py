@@ -26,7 +26,7 @@ def Pack(commands, res):
         if not cmd.atlas in filenames:
             filenames[cmd.atlas] = []
 
-        for path in cmd.image:
+        for path in cmd.path:
             image = PIL.Image.open(path)
 
             if 'A' not in image.getbands():
@@ -62,6 +62,7 @@ def Pack(commands, res):
         image.save(res.bin, "PNG")
 
         res.add('ATLAS_' + name.upper())
+        res.string('ATLAS_COUNT_' + name.upper(), len(boxes))
 
         for i, box in enumerate(boxes):
             res.bin.write(struct.pack('HHHH', *box.uv(size, 0xFFFF)))
@@ -69,4 +70,5 @@ def Pack(commands, res):
             fname = filenames[name][i]
             res.add(f"ATLAS_IMG_{fname}")
 
+        res.flush()
         

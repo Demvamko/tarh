@@ -1,11 +1,12 @@
 #include <lib/glew.h>
 #include <math.h>
 #include <stdlib.h>
-#include <arh/arhgl.h>
+#include <arh/gl.h>
 #include <voxel/voxels.h>
 #include <voxel/def.h>
 #include <voxel/tables.h>
 #include <voxel/types.h>
+#include <ext/pack.h>
 
 #define CHUNK_META_U_BIND 3
 
@@ -20,34 +21,16 @@ struct Chunk{
 };
 
 typedef struct Vert{
-    unsigned short x : 5;
-    unsigned short y : 5;
-    unsigned short z : 5;
-    unsigned char u : 1;
-    unsigned char v : 1;
-    unsigned char s : 3;
-    unsigned char type;
-    unsigned char light;
-} Vert;
-
-typedef struct Vert2{
     uchar pos[3];
     uchar light;
-    short uv[2];
-} Vert2;
+    ushort uvpos : 2;
+    ushort uvid : 14;
+} Vert;
 
-static Attributes VERT2_ATTRIBS[] = {
-    { 3, GL_UBYTE, 0, sizeof(Vert2), 0, 1},
-    { 1, GL_UBYTE, 0, sizeof(Vert2), 3, 1},
-    { 2, GL_SHORT, 1, sizeof(Vert2), 4, 0},
-};
-
-static Attributes VERT_ATTRIBS[] = { 
-    { 1, GL_SHORT, 0, sizeof(Vert), 0, 1 }, 
-    { 1, GL_BYTE , 0, sizeof(Vert), 2, 1 }, 
-    { 1, GL_BYTE , 0, sizeof(Vert), 3, 1 }, 
-    { 1, GL_BYTE , 0, sizeof(Vert), 4, 1 }, 
-    { 0 }
+static Attributes VERT_ATTRIBS[] = {
+    { 3, GL_UBYTE, 0, sizeof(Vert), 0, 1},
+    { 1, GL_UBYTE, 0, sizeof(Vert), 3, 1},
+    { 1, GL_SHORT, 0, sizeof(Vert), 4, 1},
 };
 
 Chunk* chunks[MAX_CHK] = { 0 };
@@ -60,7 +43,7 @@ static uint shader;
 static Texture texture;
 
 void InitVoxels(){
-    shader = CreateShader("./res/glsl/blocks.glsl");
+    shader = CreateShaderRes(VOXEL_SHADER_VERTEX_RANGE ,VOXEL_SHADER_FRAGMENT_RANGE);
     texture = CreateImgTexture("./res/img/block/acacia_bark_top.png", 0);
 
     for(int y = 0; y < 4; y++)
@@ -71,6 +54,7 @@ void InitVoxels(){
 
 void RenderVoxels(){
     glUseProgram(shader);
+    glCheckError();
     BindTexture(&texture);   
 
     for(int i = 0; i < chunklen; i++){
@@ -120,29 +104,35 @@ Chunk* Chunk_Load(int x, int y){
     return c;
 }
 
+static int neigbours[] = {
+     1,  0,  0,
+    -1,  0,  0,
+     0,  1,  0,
+     0, -1,  0,
+     0,  0,  1,
+     0,  0, -1,
+};
+
 char* Chunk_GetVoxel(Chunk* c, int x, int y, int z){
     if(!c)
         return &null;
 
-    if(x < 0)
-        return Chunk_GetVoxel(c->sides[SIDE_X_N_1], x + CHK_DIM, y, z);
+    int cnx = (x > CHK_DIM) - (x < 0);
+    int cny = (x > CHK_DIM) - (y < 0);
+    int cnz = (z > CHK_DIM) - (z < 0);
 
-    if(x >= CHK_DIM)
-        return Chunk_GetVoxel(c->sides[SIDE_X_P_1], x - CHK_DIM, y, z);
-
-    if(y < 0)
-        return Chunk_GetVoxel(c->sides[SIDE_Y_N_1], x, y + CHK_DIM, z);
-
-    if(y >= CHK_DIM)
-        return Chunk_GetVoxel(c->sides[SIDE_Y_P_1], x, y - CHK_DIM, z);
-
-    if(z < 0)
-        return Chunk_GetVoxel(c->sides[SIDE_Z_N_1], x, y, z + CHK_DIM);
-
-    if(z >= CHK_DIM)
-        return Chunk_GetVoxel(c->sides[SIDE_Z_P_1], x, y, z - CHK_DIM);
+    if(cnx || cny || cnz)
+        return &null;
 
     return &(c->blocks[IDX(x,y,z)]);
+}
+
+char* Chunk_GetNeigbour(Chunk* c, int x, int y, int z, int side){
+    int nx = neigbours[side * 3];
+    int ny = neigbours[side * 3 + 1];
+    int nz = neigbours[side * 3 + 2];
+
+    return Chunk_GetVoxel(c, nx, ny, nz);
 }
 
 char* Voxel_Get(int x, int y, int z){
@@ -157,6 +147,14 @@ char* Voxel_Get(int x, int y, int z){
         return &null;
 
     return Chunk_GetVoxel(c, bx, y, bz);
+}
+
+char* Voxel_GetNeighbour(int x, int y, int z, int side){
+    int nx = neigbours[side * 3];
+    int ny = neigbours[side * 3 + 1];
+    int nz = neigbours[side * 3 + 2];
+
+    return Voxel_Get(nx, ny, nz);
 }
 
 void Voxel_Set(int x, int y, int z, char val){
@@ -200,49 +198,50 @@ void Chunk_RefreshMesh(Chunk* chunk){
     int len = 0;
     Vert* verts = calloc(max, sizeof(Vert));
 
-    ITER {
-        char block = *Chunk_GetVoxel(chunk, x, y, z);
+    int coord[3];
+
+    int idx = 0;
+
+    for(coord[0] = 0; coord[0] < CHK_DIM; coord[0]++)
+    for(coord[1] = 0; coord[1] < CHK_DIM; coord[1]++)
+    for(coord[2] = 0; coord[2] < CHK_DIM; coord[2]++, idx++)
+    {
+        char block = *Chunk_GetVoxel(chunk, coord[0], coord[1], coord[2]);
 
         if(block == BLOCK_AIR)
             continue;
 
         SIDES {
-            char nblock = *Chunk_GetVoxel(chunk, NX, NY, NZ);
+            char nblock = *Chunk_GetNeigbour(chunk, coord[0], coord[1], coord[2], s);
 
             if(nblock != BLOCK_AIR)
                 continue;
 
             VERTS {
-                arhvec3 vert = cube_rects[s][v];
+                #define FOR(x) for(int iter = 0; iter < x; iter++)
 
-                verts[len].x = vert.x + x;
-                verts[len].y = vert.y + y;
-                verts[len].z = vert.z + z;
+                const int* vert = cube_rects[s][v];
+                const int* uv = uv_table[s][v];
 
-                arhvec2 uv = uv_table[s][v];
-
-                verts[len].u = uv.x;
-                verts[len].v = uv.y;
-
-                verts[len].s = s;
-                verts[len].type = block;
-
+                FOR(3) verts[len].pos[iter] = vert[iter] + coord[iter];
+                verts[len].uvpos = uv[0] + uv[1] * 2;
+                verts[len].uvid = block;
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;
 
-                for(int i = 0; i < 3; i++){
-                    arhvec3 ncoord = occlusion_table[s][v][i];
+                // for(int i = 0; i < 3; i++){
+                //     const int* ncoord = occlusion_table[s][v][i];
 
-                    char iblock = *Chunk_GetVoxel(
-                        chunk,
-                        ncoord.x + x,
-                        ncoord.y + y,
-                        ncoord.z + z
-                    );
+                //     char iblock = *Chunk_GetVoxel(
+                //         chunk,
+                //         ncoord[0] + coord[0],
+                //         ncoord[1] + coord[1],
+                //         ncoord[2] + coord[2]
+                //     );
 
-                    if(iblock != BLOCK_AIR)
-                        light -= 5;
-                }
+                //     if(iblock != BLOCK_AIR)
+                //         light -= 5;
+                // }
 
                 verts[len].light = light;
 

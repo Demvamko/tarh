@@ -1,0 +1,11 @@
+#version 330 
+
+0 vec2 pos;
+
+vert {
+    return vec4(pos, 0, 1);
+}
+
+frag {
+    return vec4(1, 1, 1, 1);
+}

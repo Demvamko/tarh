@@ -13,10 +13,12 @@
 import os
 import utils
 import atlas
+import arhsl
 import resource
 
 packers = {
     'image': atlas.Pack,
+    'shader': arhsl.Pack
 }
 
 def main():
@@ -45,9 +47,8 @@ def main():
     res = resource.Res(output, header)
 
     for group, cmds in groups.items():
+        print("PACKING: " + group)
         if group in packers.keys():
             packers[group](cmds, res)
-
-
 
 main()

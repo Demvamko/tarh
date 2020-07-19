@@ -27,18 +27,18 @@ class Command():
             val = kvp[1]
 
             if val.startswith('"'):
-                val = val[1:-1]
+                val = val.strip()[1:-1]
 
             out[key] = val
 
-        self.id = out['id']
-        self.type = out['type']
+        self.id = out.get('id')
+        self.type = out.get('type')
+        self.path = glob.glob(out.get('path')) or [ out.get('path') ]
 
         #ATLAS VARIABLES
-        self.atlas = out['atlas']
-        self.image = glob.glob(out['image'])
+        self.atlas = out.get('atlas')
 
-
+        self.line = line
 
 # def GenerateFont(name):
 #     face = freetype.Face(f"./res/font/{name}.ttf")

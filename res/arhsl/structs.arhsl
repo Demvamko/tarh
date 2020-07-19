@@ -1,0 +1,18 @@
+0 struct camera {
+    mat4x4 proj;
+    mat4x4 view;
+} camera;
+
+1 struct chunk {
+    ivec2 cpos;
+} chunk;
+
+2 struct __free__ {} __free__;
+
+3 struct font{
+    float uvs[127 * 4];
+} font;
+
+4 struct atlas {
+    float uvs[ATLAS_COUNT_VOXEL * 4];
+} atlas;

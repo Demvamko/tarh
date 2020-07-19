@@ -4,6 +4,8 @@
 #define CHK_DIM 16
 #define CHK_SZ 16 * 16 * 16
 
+//pack --type="shader" --id="VOXEL_SHADER" --path="./res/arhsl/blocks.arhsl"
+
 typedef struct Chunk Chunk;
 
 void InitVoxels();

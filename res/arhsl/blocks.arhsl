@@ -1,0 +1,28 @@
+#version 330
+#include <../../inc/ext/pack.h>
+#include <structs.arhsl>
+#include <common.arhsl>
+
+0 ivec3 pos;
+1 int uvid;
+2 int ao;
+
+0 sampler2D tex;
+
+vec2 uv;
+float fao;
+
+vert {
+    pos += ivec3(chunk.cpos * 16, 0);
+
+    uv = getuv(uvid, atlas.uvs);
+    fao = float(ao) / 16.0;
+
+    return camera.proj * camera.view * vec4(vec3(pos), 1);
+}
+
+frag {
+    vec4 color = texture(tex, uv);
+    color.rgb *= fao;
+    return color;
+}

@@ -18,7 +18,7 @@ layout (binding = 3) uniform u1{
 };
 
 void main(){
-    vec3 npos = vec3(
+    vec3 ppos = vec3(
         pos & 0x001f, //0000000000011111
         (pos & 0x03E0) >> 5, //0000001111100000
         (pos & 0x7C00) >> 10  //0111110000000000
@@ -68,4 +68,3 @@ void main(){
 }
 
 #endif
-

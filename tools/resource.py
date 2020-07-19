@@ -18,4 +18,9 @@ class Res():
         self.head.write("\n")
         self.id += 1
 
-    
+    def string(self, name, val):
+        self.head.write(f'#define {name} {val} \n')
+
+    def flush(self):
+        self.bin.flush()
+        self.head.flush()

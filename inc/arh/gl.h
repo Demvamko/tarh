@@ -56,6 +56,8 @@ void RenderBuffer(Buffer* buffer);
 
 //SHADERS
 uint CreateShader(char* path);
+uint CreateShaderRes(int* rvert, int* rfrag);
+
 void ShaderPass(uint shader);
 
 //PRESETS

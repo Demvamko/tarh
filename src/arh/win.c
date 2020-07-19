@@ -1,6 +1,6 @@
 #include <lib/glew.h>
 #include <glfw3.h>
-#include <arh/arhwin.h>
+#include <arh/win.h>
 
 GLFWwindow* window;
 

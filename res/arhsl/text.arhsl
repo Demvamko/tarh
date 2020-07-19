@@ -1,0 +1,38 @@
+#version 330
+
+0 ivec2 pos;
+1 int c;
+2 int uv;
+
+1 struct u1{
+    ivec2 res;
+};
+
+3 struct u3{
+    float uvs[127 * 4];
+};
+
+0 sampler2D tex;
+
+vert {
+    int idu = in_uv & 1;
+    int idv = (in_uv & 2) >> 1;
+    int z = (in_uv & ~2) >> 2; 
+    
+    float u = uvs[c * 4 + 0 + idu * 2];
+    float v = uvs[c * 4 + 1 + idv * 2];
+
+    uv = vec2(u, v);
+
+    vec2 p = vec2(pos) / vec2(res);
+    p = (p - 0.5) * 2.0;
+    return vec4(p, -z / 500.0, 1.0);
+}
+
+frag {
+    vec4 c = texture(tex, vec2(uv.x, uv.y));
+ 
+    return vec4(1, 1, 1, c.r);
+}
+
+#endif

@@ -3,5 +3,5 @@
 
 Voxel voxels[] = {
     { 0, 0 },                       //AIR
-    { ATLAS_IMG_stone1, 0 }         //STONE
+    { ATLAS_IMG_grass, 0 }         //STONE
 };

@@ -1,7 +1,7 @@
-#include <arh/arhgl.h>
+#include <arh/gl.h>
 #include <cglm.h>
 #include <lib/glew.h>
-#include <arh/arhcam.h>
+#include <arh/cam.h>
 #include <stdio.h>
 
 vec3 camera_pos = { 4, 10, 3 };

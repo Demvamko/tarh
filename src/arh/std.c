@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <arh/arhstd.h>
+#include <arh/std.h>
 
-void* ArhLoadFile(const char* path, int* outsize){
+void* Arh_LoadFile(const char* path, int* outsize){
     FILE* file = fopen(path, "rb");
 
     fseek(file, 0, SEEK_END);
@@ -22,7 +22,7 @@ void* ArhLoadFile(const char* path, int* outsize){
     return mem;
 }
 
-int BinarySearch(int* arr, int size, int target) 
+int Arh_BinarySearch(int* arr, int size, int target) 
 { 
     int low = 0;
     int high = size;
@@ -41,7 +41,7 @@ int BinarySearch(int* arr, int size, int target)
     return -1;
 }
 
-void SortedInsert(int* arr, int top, int value){
+void Arh_SortedInsert(int* arr, int top, int value){
     int cursor = top - 1;
 
     while(arr[cursor] > value){
@@ -53,3 +53,12 @@ void SortedInsert(int* arr, int top, int value){
     arr[cursor] = value;
 }
 
+static char* binary;
+
+void Arh_InitResources(){
+    binary = Arh_LoadFile("./res/bin/pack.bin", 0);
+}
+
+void* Arh_GetResource(int offset){
+    return binary + offset;
+}
