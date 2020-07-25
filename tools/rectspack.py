@@ -14,10 +14,10 @@ class Rect():
 
     def uv(self, divisor, normal):
         return [
-            int((self.x / divisor) * normal),
-            int((self.y / divisor) * normal),
-            int(((self.x + self.w) / divisor) * normal),
-            int(((self.y + self.h) / divisor) * normal)
+            int(((self.x + 1) / divisor) * normal),
+            int(((self.y + 1) / divisor) * normal),
+            int(((self.x + self.w - 1) / divisor) * normal),
+            int(((self.y + self.h - 1) / divisor) * normal)
         ]
 
 def Pack(boxes):

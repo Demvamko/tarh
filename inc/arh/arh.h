@@ -50,3 +50,10 @@ typedef struct arhvec3{
     int y;
     int z;
 } arhvec3;
+
+void* arralloc(uint size);
+#define arrlen(arr) (((uint*)arr)[-1])
+#define arrmax(arr) (((uint*)arr)[-2])
+#define arrexp(arr) \
+    arr = realloc(arr, ((uint*)arr)[-2] * 2); \
+    ((uint*)arr)[-2] *= 2;

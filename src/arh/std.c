@@ -62,3 +62,11 @@ void Arh_InitResources(){
 void* Arh_GetResource(int offset){
     return binary + offset;
 }
+
+void* arralloc(uint size){
+    uint* mem = malloc(size + 2 * sizeof(uint));
+    mem[0] = size;
+    mem[1] = 0;
+
+    return mem + 2;
+}

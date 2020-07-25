@@ -24,6 +24,7 @@ typedef struct Texture{
 } Texture;
 
 Texture CreateIntTexture(const char* data, uint w, uint h, uint bind);
+Texture CreateImgTextureRes(int* range, uint bind);
 Texture CreateImgTexture(const char* path, uint bind);
 Texture CreateTxtTexture(const char* text, int maxw, int maxh, uint bind);
 void BindTexture(Texture* texture);

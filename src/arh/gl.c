@@ -114,6 +114,31 @@ Texture CreateImgTexture(const char* path, uint bind){
     return tex;
 }
 
+Texture CreateImgTextureRes(int* range, uint bind){
+    uint w, h, n;
+
+    void* mem = Arh_GetResource(range[0]);
+    char* data = stbi_load_from_memory(mem, range[1] - range[0], &w, &h, &n, STBI_rgb_alpha);
+    
+    Texture tex;
+    tex.bind = bind;
+
+    glGenTextures(1, &(tex.id));
+    glActiveTexture(GL_TEXTURE0 + bind);
+    
+    glBindTexture(GL_TEXTURE_2D, tex.id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    stbi_image_free(data);
+
+    glCheckError();
+    return tex;
+}
+
 Texture CreateIntTexture(const char* data, uint w, uint h, uint bind){
     Texture tex;
     tex.bind = bind;
@@ -220,6 +245,8 @@ void SetAttributes(Attributes* attribs){
     for(int i = 0; attribs->type; i++, attribs++){
         glEnableVertexAttribArray(i);
 
+        glCheckError();
+    
         if(attribs->as_int)
             glVertexAttribIPointer(i, attribs->size, attribs->type, attribs->stride, (void*)attribs->offset);
         else

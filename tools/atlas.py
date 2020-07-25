@@ -42,7 +42,7 @@ def Pack(commands, res):
         boxes = []
         
         for image in atlas:
-            boxes.append(rectspack.Rect(0, 0, image.size[0], image.size[1]))
+            boxes.append(rectspack.Rect(0, 0, image.size[0] + 2, image.size[1] + 2))
 
         size = rectspack.Pack(boxes)
 
@@ -56,15 +56,25 @@ def Pack(commands, res):
 
             box = boxes[i]
 
-            out[box.y : box.y + box.h , box.x : box.x + box.w] = data[0 : y, 0 : x]
+            out[box.y + 1 : box.y + box.h - 1, box.x + 1 : box.x + box.w - 1] = data[0 : y, 0 : x]
+
+            out[box.y + 1 : box.y + box.h - 1, box.x] = data[0 : y, 0]
+            out[box.y + 1 : box.y + box.h - 1, box.x + box.w - 1] = data[0 : y, x - 1]
+
+            out[box.y, box.x + 1 : box.x + box.w - 1] = data[0, 0 : x]
+            out[box.y + box.h - 1, box.x + 1 : box.x + box.w - 1] = data[y - 1, 0 : x]
 
         image = PIL.Image.fromarray(out, 'RGBA')
         image.save(res.bin, "PNG")
+        image.save('./res/img/out_' + name + '.png')
 
         res.add('ATLAS_' + name.upper())
         res.string('ATLAS_COUNT_' + name.upper(), len(boxes))
+        res.string('ATLAS_UV_' + name.upper(), len(boxes) * 8)
 
+        print(f"SIZE: {size}")
         for i, box in enumerate(boxes):
+            print(f'{box.x} , {box.y} : {box.w} , {box.h}')
             res.bin.write(struct.pack('HHHH', *box.uv(size, 0xFFFF)))
 
             fname = filenames[name][i]

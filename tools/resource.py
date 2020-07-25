@@ -12,8 +12,8 @@ class Res():
 
     def add(self, name):
         last = self.pos
-        self.pos = self.bin.tell()
         self.head.write(f"#define {name} {self.pos} \n")
+        self.pos = self.bin.tell()
         self.head.write(f"#define {name}_RANGE ((int[]){{ {last}, {self.pos} }}) \n")
         self.head.write("\n")
         self.id += 1

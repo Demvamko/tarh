@@ -7,8 +7,9 @@
 #include <voxel/tables.h>
 #include <voxel/types.h>
 #include <ext/pack.h>
+#include <arh/std.h>
 
-#define CHUNK_META_U_BIND 3
+#define CHUNK_META_U_BIND 1
 
 struct Chunk{
     char blocks[CHK_SZ];
@@ -23,14 +24,14 @@ struct Chunk{
 typedef struct Vert{
     uchar pos[3];
     uchar light;
-    ushort uvpos : 2;
-    ushort uvid : 14;
+    ushort uv[2];
 } Vert;
 
 static Attributes VERT_ATTRIBS[] = {
-    { 3, GL_UBYTE, 0, sizeof(Vert), 0, 1},
-    { 1, GL_UBYTE, 0, sizeof(Vert), 3, 1},
-    { 1, GL_SHORT, 0, sizeof(Vert), 4, 1},
+    { 3, GL_UBYTE , 0, sizeof(Vert), 0, 1},
+    { 1, GL_UBYTE , 0, sizeof(Vert), 3, 1},
+    { 2, GL_USHORT, 1, sizeof(Vert), 4, 0},
+    { 0 }
 };
 
 Chunk* chunks[MAX_CHK] = { 0 };
@@ -44,7 +45,7 @@ static Texture texture;
 
 void InitVoxels(){
     shader = CreateShaderRes(VOXEL_SHADER_VERTEX_RANGE ,VOXEL_SHADER_FRAGMENT_RANGE);
-    texture = CreateImgTexture("./res/img/block/acacia_bark_top.png", 0);
+    texture = CreateImgTextureRes(ATLAS_VOXEL_RANGE, 0);
 
     for(int y = 0; y < 4; y++)
     for(int x = 0; x < 4; x++){
@@ -117,9 +118,9 @@ char* Chunk_GetVoxel(Chunk* c, int x, int y, int z){
     if(!c)
         return &null;
 
-    int cnx = (x > CHK_DIM) - (x < 0);
-    int cny = (x > CHK_DIM) - (y < 0);
-    int cnz = (z > CHK_DIM) - (z < 0);
+    int cnx = (x >= CHK_DIM) - (x < 0);
+    int cny = (x >= CHK_DIM) - (y < 0);
+    int cnz = (z >= CHK_DIM) - (z < 0);
 
     if(cnx || cny || cnz)
         return &null;
@@ -128,9 +129,9 @@ char* Chunk_GetVoxel(Chunk* c, int x, int y, int z){
 }
 
 char* Chunk_GetNeigbour(Chunk* c, int x, int y, int z, int side){
-    int nx = neigbours[side * 3];
-    int ny = neigbours[side * 3 + 1];
-    int nz = neigbours[side * 3 + 2];
+    int nx = x + neigbours[side * 3];
+    int ny = y + neigbours[side * 3 + 1];
+    int nz = z + neigbours[side * 3 + 2];
 
     return Chunk_GetVoxel(c, nx, ny, nz);
 }
@@ -150,9 +151,9 @@ char* Voxel_Get(int x, int y, int z){
 }
 
 char* Voxel_GetNeighbour(int x, int y, int z, int side){
-    int nx = neigbours[side * 3];
-    int ny = neigbours[side * 3 + 1];
-    int nz = neigbours[side * 3 + 2];
+    int nx = x + neigbours[side * 3];
+    int ny = y + neigbours[side * 3 + 1];
+    int nz = z + neigbours[side * 3 + 2];
 
     return Voxel_Get(nx, ny, nz);
 }
@@ -223,25 +224,28 @@ void Chunk_RefreshMesh(Chunk* chunk){
                 const int* vert = cube_rects[s][v];
                 const int* uv = uv_table[s][v];
 
+                ushort* uvs = Arh_GetResource(voxels[block].image);
+
                 FOR(3) verts[len].pos[iter] = vert[iter] + coord[iter];
-                verts[len].uvpos = uv[0] + uv[1] * 2;
-                verts[len].uvid = block;
+                FOR(2) verts[len].uv[iter] = uvs[uv[iter] * 2 + iter];
+                // FOR(2) verts[len].uv[iter] = uv[iter] * 0xFFFF;
+
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;
 
-                // for(int i = 0; i < 3; i++){
-                //     const int* ncoord = occlusion_table[s][v][i];
+                for(int i = 0; i < 3; i++){
+                    const int* ncoord = occlusion_table[s][v][i];
 
-                //     char iblock = *Chunk_GetVoxel(
-                //         chunk,
-                //         ncoord[0] + coord[0],
-                //         ncoord[1] + coord[1],
-                //         ncoord[2] + coord[2]
-                //     );
+                    char iblock = *Chunk_GetVoxel(
+                        chunk,
+                        ncoord[0] + coord[0],
+                        ncoord[1] + coord[1],
+                        ncoord[2] + coord[2]
+                    );
 
-                //     if(iblock != BLOCK_AIR)
-                //         light -= 5;
-                // }
+                    if(iblock != BLOCK_AIR)
+                        light -= 5;
+                }
 
                 verts[len].light = light;
 

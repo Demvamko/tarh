@@ -4,20 +4,16 @@
 #include <common.arhsl>
 
 0 ivec3 pos;
-1 int uvid;
-2 int ao;
+1 int ao;
+2 vec2 uv;
 
 0 sampler2D tex;
 
-vec2 uv;
 float fao;
 
 vert {
-    pos += ivec3(chunk.cpos * 16, 0);
-
-    uv = getuv(uvid, atlas.uvs);
+    pos += ivec3(chunk.cpos.x * 16, 0, chunk.cpos.y * 16);
     fao = float(ao) / 16.0;
-
     return camera.proj * camera.view * vec4(vec3(pos), 1);
 }
 
@@ -25,4 +21,5 @@ frag {
     vec4 color = texture(tex, uv);
     color.rgb *= fao;
     return color;
+    // return vec4(fao,fao,fao,1);
 }
