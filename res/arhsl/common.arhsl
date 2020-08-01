@@ -1,5 +1,5 @@
 
-vec2 getuv(int uvid, float uvs[ATLAS_COUNT_VOXEL * 4]){
+fun vec2 getuv(int uvid, float uvs[ATLAS_COUNT_VOXEL * 4]){
     int pos1 = (uvid & 1) * 2;      //0b0001
     int pos2 = (uvid & 2) * 2;      //0b0010
     int id = uvid >> 2;
@@ -8,4 +8,4 @@ vec2 getuv(int uvid, float uvs[ATLAS_COUNT_VOXEL * 4]){
         uvs[id + pos1],
         uvs[id + 1 + pos2]
     );
-}
+};

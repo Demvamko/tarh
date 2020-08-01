@@ -18,7 +18,6 @@ struct Chunk{
     struct Chunk* sides[6];
     char dirty;
     Buffer buffer;
-    Uniform uniform;
 };
 
 typedef struct Vert{
@@ -27,7 +26,7 @@ typedef struct Vert{
     ushort uv[2];
 } Vert;
 
-static Attributes VERT_ATTRIBS[] = {
+static Attribute VERT_ATTRIBS[] = {
     { 3, GL_UBYTE , 0, sizeof(Vert), 0, 1},
     { 1, GL_UBYTE , 0, sizeof(Vert), 3, 1},
     { 2, GL_USHORT, 1, sizeof(Vert), 4, 0},
@@ -41,11 +40,10 @@ int chunklen = 0;
 
 static char null = 0;
 static uint shader;
-static Texture texture;
 
 void InitVoxels(){
     shader = CreateShaderRes(VOXEL_SHADER_VERTEX_RANGE ,VOXEL_SHADER_FRAGMENT_RANGE);
-    texture = CreateImgTextureRes(ATLAS_VOXEL_RANGE, 0);
+    Arh_Texture_Create(Arh_GetResource(ATLAS_VOXEL), ATLAS_VOXEL_RANGE[1], 0);
 
     for(int y = 0; y < 4; y++)
     for(int x = 0; x < 4; x++){

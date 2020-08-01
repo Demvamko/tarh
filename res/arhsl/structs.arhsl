@@ -1,18 +1,20 @@
-0 struct camera {
+ubo 0 {
     mat4x4 proj;
     mat4x4 view;
 } camera;
 
-1 struct chunk {
+ubo 1 {
     ivec2 cpos;
 } chunk;
 
-2 struct __free__ {} __free__;
+ubo 2 __free__ {} __free__;
 
-3 struct font{
+ubo 3 {
     float uvs[127 * 4];
 } font;
 
-4 struct atlas {
+ubo 4 {
     float uvs[ATLAS_COUNT_VOXEL * 4];
 } atlas;
+
+uni 0 sampler2D voxel_atlas;

@@ -52,8 +52,23 @@ typedef struct arhvec3{
 } arhvec3;
 
 void* arralloc(uint size);
+
 #define arrlen(arr) (((uint*)arr)[-1])
 #define arrmax(arr) (((uint*)arr)[-2])
-#define arrexp(arr) \
-    arr = realloc(arr, ((uint*)arr)[-2] * 2); \
-    ((uint*)arr)[-2] *= 2;
+#define arrelem(arr) (((uint*)arr)[-3])
+
+#define arrcount(arr) (arrlen(arr) / arrelem(arr))
+
+#define arrexp(arr)                                                 \
+    arr = (uint*)realloc(((uint*)arr - 3), arrmax(arr) * 2)) + 3;   \
+    arrmax(arr) *= 2;
+
+#define arrpush(arr, elem)          \
+    arr[arrcount(arr)] = elem;      \
+    arrlen(arr) += 1;
+
+#define arrpushc(arr, elem)         \
+    if(arrlen(arr) >= arrmax(arr)){ \
+        arrexp(arr)                 \
+    }                               \
+    arrpush(arr, elem)              \

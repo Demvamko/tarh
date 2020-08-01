@@ -4,6 +4,10 @@
 
 GLFWwindow* window;
 
+void __stdcall GLErrorCallback(uint stc, uint type, uint id, uint sev, uint len, const char* msg, const void* param){
+    printf("%s", msg);
+}
+
 void InitWindow(){
     glfwInit();
 
@@ -20,8 +24,15 @@ void InitWindow(){
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
-    glPointSize(4.0f);
+ 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(GLErrorCallback, 0);
+
+    glClearColor(1, 1, 1, 1);
+
+    glLineWidth(1);
+    glPointSize(4.0f);
 }

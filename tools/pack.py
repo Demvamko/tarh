@@ -34,7 +34,7 @@ def main():
             if not line.startswith('//pack'):
                 continue
 
-            cmd = utils.Command(line)
+            cmd = resource.Command(line)
 
             if cmd.type not in groups.keys():
                 groups[cmd.type] = []

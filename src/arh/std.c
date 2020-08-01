@@ -63,10 +63,11 @@ void* Arh_GetResource(int offset){
     return binary + offset;
 }
 
-void* arralloc(uint size){
-    uint* mem = malloc(size + 2 * sizeof(uint));
-    mem[0] = size;
-    mem[1] = 0;
+void* arralloc(uint size, uint elemsize){
+    uint* mem = malloc(size + 3 * sizeof(uint));
+    mem[0] = elemsize;  // -3 Elemsize
+    mem[1] = size;      // -2 Maximum
+    mem[2] = 0;         // -1 Lenght
 
-    return mem + 2;
+    return mem + 3;
 }

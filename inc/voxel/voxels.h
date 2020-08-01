@@ -4,7 +4,8 @@
 #define CHK_DIM 16
 #define CHK_SZ 16 * 16 * 16
 
-//pack --type="shader" --id="VOXEL_SHADER" --path="./res/arhsl/blocks.arhsl"
+//pack --type=shader --name=VOXEL --path=./res/arhsl/blocks.arhsl
+//pack --type=atlas --name=VOXEL --path=./res/img/block/*.png
 
 typedef struct Chunk Chunk;
 

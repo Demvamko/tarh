@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Packing Tool DEBUG",
+            "program": "${workspaceFolder}/tools/nar/main.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "console": "integratedTerminal",
+            "type": "pwa-node"
+        },
+        {
             "name": "BUILD AND RUN",
             "type": "cppvsdbg",
             "request": "launch",

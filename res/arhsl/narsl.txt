@@ -3,9 +3,9 @@
 #include <structs.arhsl>
 #include <common.arhsl>
 
-inp 0 ivec3 pos;    // layout type name (input);
-inp 1 int ao;
-inp 2 vec2 uv;
+var 0 ivec3 pos;    // layout type name (input);
+var 1 int ao;
+var 2 vec2 uv;
 
 var float fao;  //used as in/out to convert int to float
 
@@ -16,7 +16,7 @@ vert {
 }
 
 frag {
-    vec4 color = texture(voxel_atlas, uv); //uv automatically infered as in/out type
+    vec4 color = texture(tex, uv); //uv automatically infered as in/out type
     color.rgb *= fao;
     return color;
 }

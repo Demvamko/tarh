@@ -4,8 +4,7 @@ import rectspack
 import struct
 import numpy
 import os
-
-
+import StringIO
 
 def filename(path):
     return os.path.splitext(os.path.basename(path))[0]
@@ -65,17 +64,18 @@ def Pack(commands, res):
             out[box.y + box.h - 1, box.x + 1 : box.x + box.w - 1] = data[y - 1, 0 : x]
 
         image = PIL.Image.fromarray(out, 'RGBA')
-        image.save(res.bin, "PNG")
-        image.save('./res/img/out_' + name + '.png')
+        image.save('./res/img/out_' + name + '.png') #FOR PREVIEW PURPOSES
 
-        res.add('ATLAS_' + name.upper())
-        res.string('ATLAS_COUNT_' + name.upper(), len(boxes))
-        res.string('ATLAS_UV_' + name.upper(), len(boxes) * 8)
+        mem = StringIO.StringIO()
+        image.save(mem, "PNG")
+        
+        res.add(mem, "ATLAS_" + name.upper())
+        res.define('ATLAS_' + name.upper() + "_COUNT", len(boxes))
 
-        print(f"SIZE: {size}")
         for i, box in enumerate(boxes):
-            print(f'{box.x} , {box.y} : {box.w} , {box.h}')
-            res.bin.write(struct.pack('HHHH', *box.uv(size, 0xFFFF)))
+            bin = 
+
+            res.add(struct.pack('HHHH', *box.uv(size, 0xFFFF)), 'ATLAS_IMG_' + filenames[name][i].upper())
 
             fname = filenames[name][i]
             res.add(f"ATLAS_IMG_{fname}")

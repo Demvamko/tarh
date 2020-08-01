@@ -13,32 +13,6 @@ def walk(dirs):
 
 #//pack --type=image --atlas="UI" --image="./res/img/test.png" --id="RES_IMAGE_TEST"
 
-class Command():
-    def __init__(self, line):
-
-        out = {}
-
-        for arg in line.split(' '):
-            if not arg.startswith('--'):
-                continue
-        
-            kvp = arg.split('=')
-            key = kvp[0][2:]
-            val = kvp[1]
-
-            if val.startswith('"'):
-                val = val.strip()[1:-1]
-
-            out[key] = val
-
-        self.id = out.get('id')
-        self.type = out.get('type')
-        self.path = glob.glob(out.get('path')) or [ out.get('path') ]
-
-        #ATLAS VARIABLES
-        self.atlas = out.get('atlas')
-
-        self.line = line
 
 # def GenerateFont(name):
 #     face = freetype.Face(f"./res/font/{name}.ttf")
