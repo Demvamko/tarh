@@ -53,21 +53,30 @@ void Arh_SortedInsert(int* arr, int top, int value){
     arr[cursor] = value;
 }
 
-static char* binary;
+char* resources;
 
 void Arh_InitResources(){
-    binary = Arh_LoadFile("./res/bin/pack.bin", 0);
+    resources = Arh_LoadFile("./res/bin/pack_nar.bin", 0);
 }
 
-void* Arh_GetResource(int offset){
-    return binary + offset;
+void* arralloc(uint count, uint size){
+    uint* arr = malloc(count * size + 3 * sizeof(uint));
+    arr += 3;
+
+    arrlen(arr) = 0;
+    arrmax(arr) = count * size;
+    arrelem(arr) = size; 
+
+    return arr;
 }
 
-void* arralloc(uint size, uint elemsize){
-    uint* mem = malloc(size + 3 * sizeof(uint));
-    mem[0] = elemsize;  // -3 Elemsize
-    mem[1] = size;      // -2 Maximum
-    mem[2] = 0;         // -1 Lenght
+void* arrgrow(void* arr){
+    if(arrlen(arr) + arrelem(arr) * 2 < arrmax(arr))
+        return arr;
 
-    return mem + 3;
+    arrmax(arr) *= 2;
+    uint* narr = realloc(arrraw(arr), arrmax(arr));
+    narr += 3;
+
+    return narr;
 }

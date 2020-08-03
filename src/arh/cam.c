@@ -4,105 +4,88 @@
 #include <arh/cam.h>
 #include <stdio.h>
 
-vec3 camera_pos = { 4, 10, 3 };
-vec3 camera_rot = { -GLM_PI_2f, 0, 0 };
+#define CAM_UBO_ID 0
 
-vec3 camera_up = { 0, 1, 0 };
-vec3 camera_right = { 1, 0, 0 };
-vec3 camera_front = { 0, 0, 1 };
+Camera camera = {
+    .pos = {4, 10, 3},
+    .rot = { -GLM_PI_2f, 0, 0 },
 
-int camera_resolution[2];
-
-static mat4 matrices[2];
-
-static Uniform uniform;
-static Uniform resolution;
-
-#define pos   camera_pos
-#define rot   camera_rot
-#define up    camera_up
-#define right camera_right
-#define front camera_front
-#define res   camera_resolution
+    .up = { 0, 1, 0 },
+    .right = { 1, 0, 0 },
+    .front = { 0, 0, 1 }
+};
 
 void InitCamera(int w, int h){
-    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
-    glm_lookat(pos, (vec3) { 0, 0, 0 }, up, matrices[1]);
+    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, camera.proj);
+    glm_lookat(camera.pos, (vec3) { 0, 0, 0 }, camera.up, camera.view);
 
-    res[0] = w;
-    res[1] = h;
+    camera.res[0] = w;
+    camera.res[1] = h;
 
-    uniform = CreateUniform(sizeof(mat4) * 2, matrices, 0);
-    resolution = CreateUniform(sizeof(int) * 2, res, 1);
+    Arh_Uniform_Create(&camera, sizeof(Camera), CAM_UBO_ID);
 
     RotateCamera(0,0);
     ArhCamUpdateView();
 }
 
 void ArhCamChangeSize(int w, int h){
-    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, matrices[0]);
+    glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, camera.proj);
     glViewport(0, 0, w, h);
 
-    res[0] = w;
-    res[1] = h;
+    camera.res[0] = w;
+    camera.res[1] = h;
 
-    UpdateUniform(&uniform);
-    UpdateUniform(&resolution);
+    Arh_Uniform_Update(CAM_UBO_ID, 0, sizeof(Camera));
 }
 
 void ArhCamUpdateView(){
     vec3 look;
-    glm_vec3_add(pos, front, look);
-    glm_lookat(pos, look, up, matrices[1]);
+    glm_vec3_add(camera.pos, camera.front, look);
+    glm_lookat(camera.pos, look, camera.up, camera.view);
 
-    UpdateUniform(&uniform);
-}
-
-void ArhCamBindUniform(){
-    BindUniform(&uniform);
+    Arh_Uniform_Update(CAM_UBO_ID, 0, sizeof(Camera));
 }
 
 void MoveCamera(float* v){
     vec3 movement;
 
     if(v[0]){
-        glm_vec3_mul(front, (vec3){ v[0], 0, v[0] }, movement);
-        glm_vec3_add(pos, movement, pos);
+        glm_vec3_mul(camera.front, (vec3){ v[0], 0, v[0] }, movement);
+        glm_vec3_add(camera.pos, movement, camera.pos);
     }
     if(v[1]){
-        glm_vec3_mul(right, (vec3){ v[1], 0, v[1] }, movement);
-        glm_vec3_add(pos, movement, pos);
+        glm_vec3_mul(camera.right, (vec3){ v[1], 0, v[1] }, movement);
+        glm_vec3_add(camera.pos, movement, camera.pos);
     }
     if(v[2]){
-        glm_vec3_mul(up, (vec3){ 0, v[2], 0 }, movement);
-        glm_vec3_add(pos, movement, pos);
+        glm_vec3_mul(camera.up, (vec3){ 0, v[2], 0 }, movement);
+        glm_vec3_add(camera.pos, movement, camera.pos);
     }
 
     ArhCamUpdateView();
 }
 
 void RotateCamera(float x, float y){
+    camera.rot[0] += x;
+    camera.rot[1] += y;
 
-    rot[0] += x;
-    rot[1] += y;
+    if(camera.rot[1] < -GLM_PI_2f)
+        camera.rot[1] = -GLM_PI_2f;
+    else if(camera.rot[1] > GLM_PI_2f)
+        camera.rot[1] = GLM_PI_2f;
 
-    if(rot[1] < -GLM_PI_2f)
-        rot[1] = -GLM_PI_2f;
-    else if(rot[1] > GLM_PI_2f)
-        rot[1] = GLM_PI_2f;
-
-
-    glm_vec3_copy((vec3){
-        cos(rot[1]) * sin(rot[0]),
-        sin(rot[1]),
-        cos(rot[1]) * cos(rot[0])
-    }, front);
 
     glm_vec3_copy((vec3){
-        sin(rot[0] - GLM_PI_2f),
+        cos(camera.rot[1]) * sin(camera.rot[0]),
+        sin(camera.rot[1]),
+        cos(camera.rot[1]) * cos(camera.rot[0])
+    }, camera.front);
+
+    glm_vec3_copy((vec3){
+        sin(camera.rot[0] - GLM_PI_2f),
         0,
-        cos(rot[0] - GLM_PI_2f)
-    }, right);
+        cos(camera.rot[0] - GLM_PI_2f)
+    }, camera.right);
 
-    glm_vec3_cross(right, front, up); 
+    glm_vec3_cross(camera.right, camera.front, camera.up); 
 }

@@ -1,10 +1,11 @@
 #include <lib/glew.h>
 #include <glfw3.h>
 #include <arh/win.h>
+#include <stdio.h>
 
 GLFWwindow* window;
 
-void __stdcall GLErrorCallback(uint stc, uint type, uint id, uint sev, uint len, const char* msg, const void* param){
+void __stdcall GLErrorCallback(uint stc, uint type, uint id, uint sev, int len, const char* msg, const void* param){
     printf("%s", msg);
 }
 
@@ -31,7 +32,7 @@ void InitWindow(){
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(GLErrorCallback, 0);
 
-    glClearColor(1, 1, 1, 1);
+    glClearColor(0, 0, 0, 1);
 
     glLineWidth(1);
     glPointSize(4.0f);

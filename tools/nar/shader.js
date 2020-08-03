@@ -25,7 +25,7 @@ function Var(match){
     else if(self.vtype == 'fun')
         self.def_str = `${self.type} ${self.name} ${self.body};\n`;
     else if(self.vtype == 'ubo')
-        self.def_str = `layout (binding = ${self.bind}) uniform ${self.name} ${self.type} ${self.name};\n`;
+        self.def_str = `layout (binding = ${self.bind}, std140) uniform struct_${self.name} ${self.type} ${self.name};\n`;
     else if(self.vtype == 'uni')
         self.def_str = `layout (binding = ${self.bind}) uniform ${self.type} ${self.name};\n`;
     else if(self.vtype == 'var')
@@ -100,8 +100,8 @@ function Generate(repr){
         repr.vert = repr.vert.replace(regex, `r_${i.name}`);
         repr.frag = repr.frag.replace(regex, `r_${i.name}`);
 
-        if(rvert || rfrag)
-            repr.vert = `${rfrag ? '' : i.type} r_${i.name} = ${i.name};\n` + repr.vert;
+        if((rvert || rfrag) && i.vtype != 'var')
+            repr.vert = `    ${rfrag ? '' : i.type + ' '}r_${i.name} = ${i.name};\n` + repr.vert;
 
         if(rfrag){
             frag += `in ${i.type} r_${i.name};\n`;
@@ -127,6 +127,9 @@ function Generate(repr){
 
     vert = vert.replace(/\r/g, '');
     frag = frag.replace(/\r/g, '');
+
+    console.log(vert);
+    console.log(frag);
 
     return { 
         [`${repr.name}_VERT`]: Buffer.from(vert), 

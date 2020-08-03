@@ -60,6 +60,8 @@ function Command(line){
     let bin = fs.createWriteStream('./res/bin/pack_nar.bin');
     let head = fs.createWriteStream('./inc/ext/pack_nar.h');
     let code = fs.createWriteStream('./inc/ext/init_nar.h');
+
+    head.write(`extern char* resources;\n\n`);
     
     Serialize(outputs, bin, head, code);
 })();
@@ -71,7 +73,7 @@ async function Serialize(input, bin, head, code){
             continue;
         }
         
-        head.write(`#define NAR_${key} (res + ${bin.bytesWritten + 4})\n`);
+        head.write(`#define NAR_${key} (resources + ${bin.bytesWritten + 4})\n`);
         await bin.async_write(Buffer.from(new Uint32Array([input[key].length]).buffer));
         await bin.async_write(input[key]);
     }

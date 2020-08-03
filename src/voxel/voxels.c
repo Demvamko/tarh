@@ -6,10 +6,10 @@
 #include <voxel/def.h>
 #include <voxel/tables.h>
 #include <voxel/types.h>
-#include <ext/pack.h>
+#include <ext/pack_nar.h>
 #include <arh/std.h>
 
-#define CHUNK_META_U_BIND 1
+#define CHUNK_UBO_BIND 1
 
 struct Chunk{
     char blocks[CHK_SZ];
@@ -39,11 +39,16 @@ int keysy[MAX_CHK] = { 0 };
 int chunklen = 0;
 
 static char null = 0;
+
 static uint shader;
+static uint format;
 
 void InitVoxels(){
-    shader = CreateShaderRes(VOXEL_SHADER_VERTEX_RANGE ,VOXEL_SHADER_FRAGMENT_RANGE);
-    Arh_Texture_Create(Arh_GetResource(ATLAS_VOXEL), ATLAS_VOXEL_RANGE[1], 0);
+    format = Arh_Attrib_Create(VERT_ATTRIBS);
+    shader = Arh_Shader_Create(NAR_VOXEL_VERT, NAR_VOXEL_FRAG);
+    Arh_Texture_Create(NAR_VOXEL_ATLAS, 0);
+    Arh_Uniform_Create((int[]){ 0, 0 }, sizeof(int) * 2, CHUNK_UBO_BIND);
+    
 
     for(int y = 0; y < 4; y++)
     for(int x = 0; x < 4; x++){
@@ -53,8 +58,6 @@ void InitVoxels(){
 
 void RenderVoxels(){
     glUseProgram(shader);
-    glCheckError();
-    BindTexture(&texture);   
 
     for(int i = 0; i < chunklen; i++){
         Chunk* chunk = chunks[i];
@@ -62,8 +65,8 @@ void RenderVoxels(){
         if(chunk->dirty)
             Chunk_RefreshMesh(chunk);
 
-        BindUniform(&chunk->uniform);
-        RenderBuffer(&chunk->buffer);
+        Arh_Uniform_Rewrite(CHUNK_UBO_BIND, 0, sizeof(int) * 2, &(chunk->x));
+        Arh_Buffer_Render(&chunk->buffer);
     }
 }
 
@@ -188,17 +191,12 @@ void Chunk_Generate(Chunk* c){
         if(y < 5 + simplex * 4)
             c->blocks[id] = BLOCK_STONE;
     }
-
-    c->uniform = CreateUniform(2 * sizeof(int), (int[]){ c->x, c->y }, CHUNK_META_U_BIND);
 }
 
 void Chunk_RefreshMesh(Chunk* chunk){
-    int max = 1024;
-    int len = 0;
-    Vert* verts = calloc(max, sizeof(Vert));
+    Vert* verts = arralloc(1024, sizeof(Vert));
 
     int coord[3];
-
     int idx = 0;
 
     for(coord[0] = 0; coord[0] < CHK_DIM; coord[0]++)
@@ -219,14 +217,15 @@ void Chunk_RefreshMesh(Chunk* chunk){
             VERTS {
                 #define FOR(x) for(int iter = 0; iter < x; iter++)
 
-                const int* vert = cube_rects[s][v];
+                Vert* vert = (Vert*)arrnext(verts);
+
+                const int* rect = cube_rects[s][v];
                 const int* uv = uv_table[s][v];
 
-                ushort* uvs = Arh_GetResource(voxels[block].image);
+                ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 4 * voxels[block].image;
 
-                FOR(3) verts[len].pos[iter] = vert[iter] + coord[iter];
-                FOR(2) verts[len].uv[iter] = uvs[uv[iter] * 2 + iter];
-                // FOR(2) verts[len].uv[iter] = uv[iter] * 0xFFFF;
+                FOR(3) vert->pos[iter] = rect[iter] + coord[iter];
+                FOR(2) vert->uv[iter] = uvs[uv[iter] * 2 + iter];
 
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;
@@ -245,25 +244,21 @@ void Chunk_RefreshMesh(Chunk* chunk){
                         light -= 5;
                 }
 
-                verts[len].light = light;
+                vert->light = light;
 
-                len++;
-
-                if(len >= max){
-                    max = max * 2;
-                    verts = realloc(verts, max * sizeof(Vert));
-                }
+                arrlen(verts) += sizeof(Vert);
+                verts = arrgrow(verts);
             }
         }
     }
 
     if(chunk->buffer.vao)
-        DeleteBuffer(&chunk->buffer);
+        Arh_Buffer_Delete(&chunk->buffer);
 
-    CreateBuffer(&chunk->buffer, GL_TRIANGLES, len * sizeof(Vert), verts, VERT_ATTRIBS);
+    Arh_Buffer_Create(&chunk->buffer, GL_TRIANGLES, verts, format);
     chunk->dirty = 0;
 
-    free(verts);
+    free(arrraw(verts));
 }
 
 #define sign(x) ((x) > 0) - ((x) < 0)

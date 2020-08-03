@@ -1,7 +1,5 @@
 #version 440
-#include <../../inc/ext/pack.h>
 #include <structs.arhsl>
-#include <common.arhsl>
 
 inp 0 ivec3 pos;    // layout type name (input);
 inp 1 int ao;

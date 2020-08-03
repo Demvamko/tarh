@@ -1,11 +1,19 @@
 
+typedef struct { 
+    uint res[4];
 
-extern float camera_pos[3];
-extern float camera_rot[3];
-extern float camera_up[3];
-extern float camera_right[3];
-extern float camera_front[3];
-extern int camera_resolution[2];
+    float pos[4];
+    float rot[4];
+
+    float up[4];
+    float right[4];
+    float front[4];
+
+    float view[4][4];
+    float proj[4][4];
+} Camera;
+
+extern Camera camera;
 
 void InitCamera(int w, int h);
 void ArhCamChangeSize(int w, int h);

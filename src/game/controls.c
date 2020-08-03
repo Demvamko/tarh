@@ -92,7 +92,7 @@ void OnMouseButton(GLFWwindow* window, int button, int action, int mods){
     int rayhit[3] = { 0 };
     int rayprev[3] = { 0 };
 
-    Voxel_RayCast_Vector(camera_pos, camera_front, 50, rayhit, rayprev);
+    Voxel_RayCast_Vector(camera.pos, camera.front, 50, rayhit, rayprev);
 
     if(button == GLFW_MOUSE_BUTTON_LEFT)
         Voxel_Set(ARGS(rayhit), BLOCK_AIR);

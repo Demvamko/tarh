@@ -21,6 +21,7 @@ src\\arh\\*.c `
 src\\game\\*.c `
 src\\lib\\*.c `
 src\\voxel\\*.c `
+src\\gl\\*.c `
 glfw3dll.lib `
 opengl32.lib `
 freetype.lib `

@@ -1,7 +1,7 @@
-#include <gl/buff.h>
+#include <arh/gl.h>
 #include <lib/glew.h>
 
-uint Arh_Attr_Create(Attribute* attribs){
+uint Arh_Attrib_Create(Attribute* attribs){
     uint vao = 0;
 
     glGenVertexArrays(1, &vao);
@@ -19,29 +19,32 @@ uint Arh_Attr_Create(Attribute* attribs){
         
         glVertexAttribBinding(i, 0);
     }
+
+    return vao;
 }
 
-void Arh_Buff_Create(Buffer* buffer, uint type, void* data, uint vao){
+void Arh_Buffer_Create(Buffer* buffer, uint type, void* data, uint vao){
     buffer->vao = vao;
     buffer->type = type;
     buffer->data = data;
+    buffer->count = arrcount(data);
+    buffer->stride = arrelem(data);
 
-    glGenBuffers(1, &(buffer->vbo));
-    glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
-    glBufferData(GL_ARRAY_BUFFER, arrlen(buffer->data), buffer->data, GL_STATIC_DRAW);
+    glGenBuffers(1, &(buffer->id));
+    glNamedBufferData(buffer->id, arrlen(buffer->data), buffer->data, GL_STATIC_DRAW);
 }
 
-void Arh_Buff_Render(Buffer* buffer){
+void Arh_Buffer_Render(Buffer* buffer){
     glBindVertexArray(buffer->vao);
-    glBindVertexBuffer(0, buffer->vbo, 0, arrelem(buffer->data));
+    glBindVertexBuffer(0, buffer->id, 0, buffer->stride);
 
-    glDrawArrays(buffer->type, 0, arrcount(buffer->data));
+    glDrawArrays(buffer->type, 0, buffer->count);
 }
 
-void Arh_Buff_Update(Buffer* buffer, uint offset, uint size){
-    glNamedBufferSubData(buffer->vbo, offset, size, buffer->data);
+void Arh_Buffer_Update(Buffer* buffer, uint offset, uint size){
+    glNamedBufferSubData(buffer->id, offset, size, buffer->data);
 }
 
-void Arh_Buff_Delete(Buffer* buffer){
-    glDeleteBuffers(1, &buffer->vbo);
+void Arh_Buffer_Delete(Buffer* buffer){
+    glDeleteBuffers(1, &buffer->id);
 }
