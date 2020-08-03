@@ -185,11 +185,12 @@ void Chunk_Generate(Chunk* c){
         int cz = z + c->y * 16.0f;
 
         float simplex = snoise2(cx / 64.0f, cz / 64.0f);
+        float simplex2 = snoise2(cz / 64.0f, cx / 64.0f);
 
         c->blocks[id] = BLOCK_AIR;
 
         if(y < 5 + simplex * 4)
-            c->blocks[id] = BLOCK_STONE;
+            c->blocks[id] = y < (5 + simplex2 * 4) ? BLOCK_DIRT : BLOCK_GRASS;
     }
 }
 
@@ -222,7 +223,7 @@ void Chunk_RefreshMesh(Chunk* chunk){
                 const int* rect = cube_rects[s][v];
                 const int* uv = uv_table[s][v];
 
-                ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 4 * voxels[block].image;
+                ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 2 * voxels[block].image;
 
                 FOR(3) vert->pos[iter] = rect[iter] + coord[iter];
                 FOR(2) vert->uv[iter] = uvs[uv[iter] * 2 + iter];

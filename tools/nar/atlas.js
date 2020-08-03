@@ -13,10 +13,12 @@ function Rect(x, y, w, h){
 Rect.prototype.bin = function(div) {
     let arr = new Uint16Array(4);
 
-    arr[0] = (this.x + 1) / div * 0xFFFF;
-    arr[1] = (this.y + 1) / div * 0xFFFF;
-    arr[2] = (this.x + this.w - 1) / div * 0xFFFF;
-    arr[3] = (this.y + this.h - 1) / div * 0xFFFF;
+    let border = this.border || 1;
+
+    arr[0] = (this.x + border) / div * 0xFFFF;
+    arr[1] = (this.y + border) / div * 0xFFFF;
+    arr[2] = (this.x + this.w - border) / div * 0xFFFF;
+    arr[3] = (this.y + this.h - border) / div * 0xFFFF;
     
     return Buffer.from(arr.buffer);
 }
@@ -80,14 +82,16 @@ async function Process(cmd){
     if(!cmd.path)
         return console.log(`ERROR: No path given in command ${cmd}`);
 
+    let border = Number(cmd.border) || 1;
     let rects = [];
 
     for(let path of glob.sync(cmd.path)){
         let image = await canvas.loadImage(path);
     
-        let rect = new Rect(0, 0, image.width + 2, image.height + 2);
+        let rect = new Rect(0, 0, image.width + border * 2, image.height + border * 2);
         rect.image = image;
         rect.path = path;
+        rect.border = border;
 
         rects.push(rect);
     }
@@ -98,7 +102,7 @@ async function Process(cmd){
 
     for(let rect of rects){
         ctx.drawImage(rect.image, rect.x, rect.y, rect.w, rect.h);
-        ctx.drawImage(rect.image, rect.x + 1, rect.y + 1, rect.w - 2, rect.h - 2);
+        ctx.drawImage(rect.image, rect.x + border, rect.y + border, rect.w - border * 2, rect.h - border * 2);
     }
 
     let buffer = cvs.toBuffer('image/png');
