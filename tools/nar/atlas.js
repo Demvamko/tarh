@@ -85,7 +85,7 @@ async function Process(cmd){
     for(let path of glob.sync(cmd.path)){
         let image = await canvas.loadImage(path);
     
-        let rect = new Rect(0, 0, image.width, image.height);
+        let rect = new Rect(0, 0, image.width + 2, image.height + 2);
         rect.image = image;
         rect.path = path;
 
@@ -96,11 +96,15 @@ async function Process(cmd){
     let cvs = canvas.createCanvas(atlas.w, atlas.h);
     let ctx = cvs.getContext('2d');
 
-    for(let rect of rects)
+    for(let rect of rects){
         ctx.drawImage(rect.image, rect.x, rect.y, rect.w, rect.h);
+        ctx.drawImage(rect.image, rect.x + 1, rect.y + 1, rect.w - 2, rect.h - 2);
+    }
 
     let buffer = cvs.toBuffer('image/png');
     let uvs = Buffer.concat(rects.map((rect) => rect.bin(atlas.w)));
+
+    fs.writeFileSync(`./res/img/${cmd.name}_ATLAS.png`, buffer);
 
     return {
         [`${cmd.name}_ATLAS`]: buffer,
