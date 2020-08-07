@@ -24,6 +24,8 @@ void Arh_Buffer_Update(Buffer* buffer, uint offset, uint size);
 void Arh_Buffer_Delete(Buffer* buffer);
 
 uint Arh_Shader_Create(char* rvert, char* rfrag);
+
+void Arh_TextureArray_Create(char* mem, uint id);
 void Arh_Texture_Create(char* mem, uint bind);
 void Arh_Texture_Empty(int w, int h, uint id);
 

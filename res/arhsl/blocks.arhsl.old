@@ -3,7 +3,7 @@
 
 inp 0 ivec3 pos;    // layout type name (input);
 inp 1 int ao;
-inp 2 vec3 uv;
+inp 2 vec2 uv;
 
 var float fao;  //used as in/out to convert int to float
 

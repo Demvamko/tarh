@@ -1,12 +1,12 @@
 #define VIEW_DISTANCE 4
-#define MAX_CHK 16*16
-
 #define CHK_DIM 16
-#define CHK_SZ 16 * 16 * 16
+#define MAX_CHK CHK_DIM * CHK_DIM
+#define CHK_SZ CHK_DIM * CHK_DIM * CHK_DIM
 
 //pack --type=atlas --name=VOXEL --path=./res/img/block/*.png
 //pack --type=shader --name=VPASS --path=./res/arhsl/pass.arhsl
 //pack --type=shader --name=VOXEL --path=./res/arhsl/blocks.arhsl
+//pack --type=raw --name=VOXEL_ARR --path=./res/img/block/*.png
 
 typedef struct Chunk Chunk;
 

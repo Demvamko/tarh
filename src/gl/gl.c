@@ -35,6 +35,41 @@ void Arh_Uniform_Rewrite(uint id, uint offset, uint size, void* data){
 //TEXTURES
 static uint textures[16];
 
+void Arh_TextureArray_Create(char* mem, uint id){
+    uint count = ((int*)mem)[0];
+    uint tex = 0;
+    uint w, h, n;
+
+    mem += sizeof(int) * 2;
+    char* data = stbi_load_from_memory(mem, arrlen(mem), &w, &h, &n, STBI_rgb_alpha);
+
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, w, h, count);
+
+    uint i = 0;
+
+    do{
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, w, h, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        uint a = sizeof(int);
+        mem += arrlen(mem) + sizeof(int);
+
+        stbi_image_free(data);
+        data = stbi_load_from_memory(mem, arrlen(mem), &w, &h, &n, STBI_rgb_alpha);
+
+        i++;
+    }
+    while(i < count);
+    
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    stbi_image_free(data);
+}
+
 void Arh_Texture_Create(char* mem, uint id){
     uint w, h, n;
     char* data = stbi_load_from_memory(mem, arrlen(mem), &w, &h, &n, STBI_rgb_alpha);

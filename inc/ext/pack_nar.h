@@ -6,3 +6,4 @@ extern char* resources;
 #define NAR_VPASS_FRAG (resources + 21685)
 #define NAR_VOXEL_VERT (resources + 21843)
 #define NAR_VOXEL_FRAG (resources + 22502)
+#define NAR_VOXEL_ARR (resources + 22736)

@@ -23,13 +23,13 @@ struct Chunk{
 typedef struct Vert{
     uchar pos[3];
     uchar light;
-    ushort uv[2];
+    ushort uv[3];
 } Vert;
 
 static Attribute VERT_ATTRIBS[] = {
     { 3, GL_UBYTE , 0, sizeof(Vert), 0, 1},
     { 1, GL_UBYTE , 0, sizeof(Vert), 3, 1},
-    { 2, GL_USHORT, 1, sizeof(Vert), 4, 0},
+    { 3, GL_USHORT, 0, sizeof(Vert), 4, 0},
     { 0 }
 };
 
@@ -44,12 +44,13 @@ static uint shader;
 static uint format;
 
 void InitVoxels(){
+    Arh_TextureArray_Create(NAR_VOXEL_ARR, 0);
+
     format = Arh_Attrib_Create(VERT_ATTRIBS);
     shader = Arh_Shader_Create(NAR_VOXEL_VERT, NAR_VOXEL_FRAG);
-    Arh_Texture_Create(NAR_VOXEL_ATLAS, 0);
+    // Arh_Texture_Create(NAR_VOXEL_ATLAS, 0);
     Arh_Uniform_Create((int[]){ 0, 0 }, sizeof(int) * 2, CHUNK_UBO_BIND);
     
-
     for(int y = 0; y < 4; y++)
     for(int x = 0; x < 4; x++){
         Chunk_Load(x, y);
@@ -138,10 +139,10 @@ char* Chunk_GetNeigbour(Chunk* c, int x, int y, int z, int side){
 }
 
 char* Voxel_Get(int x, int y, int z){
-    int cx = x / 16;
-    int cy = z / 16;
-    int bx = x % 16;
-    int bz = z % 16;
+    int cx = x / CHK_DIM;
+    int cy = z / CHK_DIM;
+    int bx = x % CHK_DIM;
+    int bz = z % CHK_DIM;
 
     Chunk* c = Chunk_Find(cx, cy);
 
@@ -160,10 +161,10 @@ char* Voxel_GetNeighbour(int x, int y, int z, int side){
 }
 
 void Voxel_Set(int x, int y, int z, char val){
-    int cx = x / 16;
-    int cy = z / 16;
-    int bx = x % 16;
-    int bz = z % 16;
+    int cx = x / CHK_DIM;
+    int cy = z / CHK_DIM;
+    int bx = x % CHK_DIM;
+    int bz = z % CHK_DIM;
 
     Chunk* c = Chunk_Find(cx, cy);
 
@@ -181,8 +182,8 @@ void Chunk_Generate(Chunk* c){
     ITER {
         int id = IDX(x, y, z);
 
-        int cx = x + c->x * 16.0f;
-        int cz = z + c->y * 16.0f;
+        int cx = x + c->x * (float)CHK_DIM;
+        int cz = z + c->y * (float)CHK_DIM;
 
         float simplex = snoise2(cx / 64.0f, cz / 64.0f);
         float simplex2 = snoise2(cz / 64.0f, cx / 64.0f);
@@ -226,7 +227,9 @@ void Chunk_RefreshMesh(Chunk* chunk){
                 ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 2 * voxels[block].image;
 
                 FOR(3) vert->pos[iter] = rect[iter] + coord[iter];
-                FOR(2) vert->uv[iter] = uvs[uv[iter] * 2 + iter];
+                // FOR(2) vert->uv[iter] = uvs[uv[iter] * 2 + iter];
+                FOR(2) vert->uv[iter] = uv[iter];
+                vert->uv[2] = voxels[block].image;
 
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;

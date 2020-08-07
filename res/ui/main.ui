@@ -1,0 +1,19 @@
+let a = {
+    root: {
+        layout: "col",
+        align: "end",
+        children: [
+            {
+                layout: "row",
+                align: "center",
+                children: blocks.map((x) => {
+                    return {
+                        aspect: 1,
+                        width: 20,
+                        image: x.image
+                    }
+                })
+            }
+        ]
+    }
+}

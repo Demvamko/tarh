@@ -5,8 +5,9 @@ const process = require('process');
 
 const util = require('./util.js');
 const atlas = require('./atlas.js');
-const font = {};
+const font = { Process: () => {} };
 const shader = require('./shader.js');
+const raw = require('./raw.js');
 
 process.on('unhandledRejection', up => { throw up });
 
@@ -24,7 +25,8 @@ const processors = {
     'atlas': atlas,
     'image': atlas,
     'font': font,
-    'shader': shader
+    'shader': shader,
+    'raw': raw
 };
 
 function Command(line){

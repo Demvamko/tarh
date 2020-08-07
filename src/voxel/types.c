@@ -1,4 +1,3 @@
-#include <ext/pack_nar.h>
 #include <voxel/types.h>
 
 Voxel voxels[] = {
