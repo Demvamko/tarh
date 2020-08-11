@@ -16,18 +16,15 @@ ubo 1 {
     ivec2 cpos;
 } chunk;
 
-ubo 2 __free__ {} __free__;
+ubo 2 {
+    vec2 pos;
+    vec2 size;
+    vec4 color;
+    int uv;
+} uirect;
 
-ubo 3 {
-    float uvs[127 * 4];
-} font;
-
-ubo 4 {
-    float uvs[ATLAS_COUNT_VOXEL * 4];
-} atlas;
-
-uni 0 sampler2DArray voxel_atlas;
-uni 1 sampler2D ui_atlas;
+uni 0 sampler2D ui_atlas;
+uni 1 sampler2DArray voxel_atlas;
 uni 2 sampler2D __free__;
 uni 3 sampler2D __free__;
 uni 4 sampler2D ui_frame;

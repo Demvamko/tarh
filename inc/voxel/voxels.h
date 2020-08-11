@@ -7,6 +7,7 @@
 //pack --type=shader --name=VPASS --path=./res/arhsl/pass.arhsl
 //pack --type=shader --name=VOXEL --path=./res/arhsl/blocks.arhsl
 //pack --type=raw --name=VOXEL_ARR --path=./res/img/block/*.png
+//pack --type=icon --process=voxel --size=64 --name=ICE --path=./res/img/block/dirt.png
 
 typedef struct Chunk Chunk;
 

@@ -1,0 +1,18 @@
+#version 440
+#include <structs.arhsl>
+
+inp 0 vec2 pos;
+inp 1 vec4 color;
+inp 2 int uv;
+
+var vec3 fuv;
+
+vert {
+    fuv = vec3((uv & 1), (uv & 2) >> 1, (uv & 0xFC) >> 2);
+    fuv.y = 1 - fuv.y;
+    return vec4(pos * 2 - 1, 0.0, 1.0);
+}
+
+frag {
+    return texture(voxel_atlas, fuv) * color;
+}

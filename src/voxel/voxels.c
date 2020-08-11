@@ -10,6 +10,7 @@
 #include <arh/std.h>
 
 #define CHUNK_UBO_BIND 1
+#define CHUNK_TEX_BIND 1
 
 struct Chunk{
     char blocks[CHK_SZ];
@@ -23,13 +24,13 @@ struct Chunk{
 typedef struct Vert{
     uchar pos[3];
     uchar light;
-    ushort uv[3];
+    uchar uv;
 } Vert;
 
 static Attribute VERT_ATTRIBS[] = {
-    { 3, GL_UBYTE , 0, sizeof(Vert), 0, 1},
-    { 1, GL_UBYTE , 0, sizeof(Vert), 3, 1},
-    { 3, GL_USHORT, 0, sizeof(Vert), 4, 0},
+    { 3, GL_UBYTE, 0, sizeof(Vert), 0, 1},
+    { 1, GL_UBYTE, 0, sizeof(Vert), 3, 1},
+    { 1, GL_UBYTE, 0, sizeof(Vert), 4, 1},
     { 0 }
 };
 
@@ -44,11 +45,10 @@ static uint shader;
 static uint format;
 
 void InitVoxels(){
-    Arh_TextureArray_Create(NAR_VOXEL_ARR, 0);
+    Arh_TextureArray_Create(NAR_VOXEL_ARR, CHUNK_TEX_BIND);
 
     format = Arh_Attrib_Create(VERT_ATTRIBS);
     shader = Arh_Shader_Create(NAR_VOXEL_VERT, NAR_VOXEL_FRAG);
-    // Arh_Texture_Create(NAR_VOXEL_ATLAS, 0);
     Arh_Uniform_Create((int[]){ 0, 0 }, sizeof(int) * 2, CHUNK_UBO_BIND);
     
     for(int y = 0; y < 4; y++)
@@ -58,7 +58,7 @@ void InitVoxels(){
 }
 
 void RenderVoxels(){
-    glUseProgram(shader);
+    Arh_Shader_Bind(shader);
 
     for(int i = 0; i < chunklen; i++){
         Chunk* chunk = chunks[i];
@@ -227,9 +227,7 @@ void Chunk_RefreshMesh(Chunk* chunk){
                 ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 2 * voxels[block].image;
 
                 FOR(3) vert->pos[iter] = rect[iter] + coord[iter];
-                // FOR(2) vert->uv[iter] = uvs[uv[iter] * 2 + iter];
-                FOR(2) vert->uv[iter] = uv[iter];
-                vert->uv[2] = voxels[block].image;
+                vert->uv = (voxels[block].image << 2) + (uv[1] * 2) + uv[0];
 
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;

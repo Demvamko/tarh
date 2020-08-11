@@ -9,13 +9,13 @@
 static float lastx = -1;
 static float lasty = -1;
 
-void InitControls(){
+void Arh_Controls_Init(){
     glfwSetKeyCallback(window, OnKey);
     glfwSetCursorPosCallback(window, OnMouseMove);
     glfwSetMouseButtonCallback(window, OnMouseButton);
 }
 
-void ControlsUpdate(){
+void Arh_Controls_Update(){
     float move[3] = { 0 };
 
     #define pressed(key) (glfwGetKey(window, key) == GLFW_PRESS)
@@ -37,7 +37,7 @@ void ControlsUpdate(){
 
     #undef pressed
 
-    MoveCamera(move);
+    Arh_Camera_Move(move);
 }
 
 
@@ -80,7 +80,7 @@ void OnMouseMove(GLFWwindow* window, double x, double y){
     lastx = x;
     lasty = y;
 
-    RotateCamera(rx, ry);
+    Arh_Camera_Rotate(rx, ry);
 }
 
 void OnMouseButton(GLFWwindow* window, int button, int action, int mods){

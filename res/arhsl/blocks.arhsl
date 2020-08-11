@@ -1,20 +1,23 @@
 #version 440
 #include <structs.arhsl>
+#include <../../inc/ext/pack_nar.h>
 
 inp 0 ivec3 pos;    // layout type name (input);
 inp 1 int ao;
-inp 2 vec3 uv;
+inp 2 int uv;
 
+var vec3 fuv;
 var float fao;  //used as in/out to convert int to float
 
 vert {
     pos += ivec3(chunk.cpos.x * 16, 0, chunk.cpos.y * 16);
     fao = float(ao) / 16.0;
+    fuv = vec3((uv & 1), (uv & 2) >> 1, (uv & 0xFC) >> 2);
     return camera.proj * camera.view * vec4(vec3(pos), 1);
 }
 
 frag {
-    vec4 color = texture(voxel_atlas, uv); //uv automatically infered as in/out type
+    vec4 color = texture(voxel_atlas, fuv); //uv automatically infered as in/out type
     color.rgb *= fao;
     return color;
 }

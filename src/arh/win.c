@@ -9,7 +9,7 @@ void __stdcall GLErrorCallback(uint stc, uint type, uint id, uint sev, int len, 
     printf("%s", msg);
 }
 
-void InitWindow(){
+void Arh_Window_Init(){
     glfwInit();
 
     glfwWindowHint(GLFW_SAMPLES, 4);
@@ -32,7 +32,7 @@ void InitWindow(){
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(GLErrorCallback, 0);
 
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0, 0, 0, 0);
 
     glLineWidth(1);
     glPointSize(4.0f);

@@ -1,12 +1,9 @@
+//pack --type=shader --name=UI --path=./res/arhsl/ui.arhsl
 
-#define ALIGN_START 0
-#define ALIGN_END 1
-#define ALIGN_CENTER 2
+#define UI_UBO_BIND 2
+#define UI_FRAME_BIND 4
 
-#define LAYOUT_HORIZONTAL 0
-#define LAYOUT_VERTICAL 1
-
-typedef struct Text{
+typedef struct {
     char* string;
     short len;
     char size;
@@ -14,16 +11,12 @@ typedef struct Text{
 } Text;
 
 typedef struct Tag{
-    short client[4];
+    float pos[2];
     float size[2];
+    float color[4];
+    uint image;
 
-    short image;
-
-    uchar color[4];
-    uchar depth;
-
-    uchar align[2];
-    uchar layout : 1;
+    float client[4];
 
     struct Tag* parent;
     struct Tag* child;
@@ -31,15 +24,13 @@ typedef struct Tag{
     struct Vert* vertices;
 } Tag;
 
-extern int UI_RECT_TABLE[6][2];
-extern int UI_UV_TABLE[6][2];
+void UI_Init();
 
-void InitUI();
-void RenderUI();
+void UI_Tag_AddChild(Tag* parent, Tag* child);
 
-void UI_RefreshChildClients(Tag* parent);
-void UI_RefreshVerts(Tag* tag);
+#ifdef UI_USAGE_FUNC
 
-// void UI_Text_CreateFont(const char* path);
-// void UI_Text_RefreshVerts(Tag* tag);
-// void UI_Text_CreateText(Tag* tag);
+void UI_Render(Buffer* buffer);
+void UI_Tag_CreateBuffer(Buffer* buffer, Tag* root, uint count);
+
+#endif

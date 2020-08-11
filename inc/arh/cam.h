@@ -15,9 +15,8 @@ typedef struct {
 
 extern Camera camera;
 
-void InitCamera(int w, int h);
-void ArhCamChangeSize(int w, int h);
-void ArhCamUpdateView();
-void ArhCamBindUniform();
-void MoveCamera(float* v);
-void RotateCamera(float x, float y);
+void Arh_Camera_Init(int w, int h);
+void Arh_Camera_Resize(int w, int h);
+void Arh_Camera_Update();
+void Arh_Camera_Move(float* v);
+void Arh_Camera_Rotate(float x, float y);

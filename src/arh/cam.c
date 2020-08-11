@@ -15,7 +15,7 @@ Camera camera = {
     .front = { 0, 0, 1 }
 };
 
-void InitCamera(int w, int h){
+void Arh_Camera_Init(int w, int h){
     glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, camera.proj);
     glm_lookat(camera.pos, (vec3) { 0, 0, 0 }, camera.up, camera.view);
 
@@ -24,11 +24,11 @@ void InitCamera(int w, int h){
 
     Arh_Uniform_Create(&camera, sizeof(Camera), CAM_UBO_ID);
 
-    RotateCamera(0,0);
-    ArhCamUpdateView();
+    Arh_Camera_Rotate(0,0);
+    Arh_Camera_Update();
 }
 
-void ArhCamChangeSize(int w, int h){
+void Arh_Camera_Resize(int w, int h){
     glm_perspective(0.25f * (float)GLM_PI, (float)w / (float)h, 0.1f, 1000.0f, camera.proj);
     glViewport(0, 0, w, h);
 
@@ -38,7 +38,7 @@ void ArhCamChangeSize(int w, int h){
     Arh_Uniform_Update(CAM_UBO_ID, 0, sizeof(Camera));
 }
 
-void ArhCamUpdateView(){
+void Arh_Camera_Update(){
     vec3 look;
     glm_vec3_add(camera.pos, camera.front, look);
     glm_lookat(camera.pos, look, camera.up, camera.view);
@@ -46,7 +46,7 @@ void ArhCamUpdateView(){
     Arh_Uniform_Update(CAM_UBO_ID, 0, sizeof(Camera));
 }
 
-void MoveCamera(float* v){
+void Arh_Camera_Move(float* v){
     vec3 movement;
 
     if(v[0]){
@@ -62,10 +62,10 @@ void MoveCamera(float* v){
         glm_vec3_add(camera.pos, movement, camera.pos);
     }
 
-    ArhCamUpdateView();
+    Arh_Camera_Update();
 }
 
-void RotateCamera(float x, float y){
+void Arh_Camera_Rotate(float x, float y){
     camera.rot[0] += x;
     camera.rot[1] += y;
 

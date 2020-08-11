@@ -1,4 +1,4 @@
 
 extern struct GLFWwindow* window;
 
-void InitWindow();
+void Arh_Window_Init();

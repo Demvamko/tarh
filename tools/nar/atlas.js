@@ -97,8 +97,10 @@ async function Process(cmd){
     }
 
     let atlas = Pack(rects);
+
     let cvs = canvas.createCanvas(atlas.w, atlas.h);
     let ctx = cvs.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
 
     for(let rect of rects){
         ctx.drawImage(rect.image, rect.x, rect.y, rect.w, rect.h);

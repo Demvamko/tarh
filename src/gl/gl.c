@@ -44,6 +44,7 @@ void Arh_TextureArray_Create(char* mem, uint id){
     char* data = stbi_load_from_memory(mem, arrlen(mem), &w, &h, &n, STBI_rgb_alpha);
 
     glGenTextures(1, &tex);
+    glActiveTexture(GL_TEXTURE0 + id);
     glBindTexture(GL_TEXTURE_2D_ARRAY, tex);
     glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, w, h, count);
 
@@ -98,7 +99,7 @@ void Arh_Texture_Empty(int w, int h, uint id){
     glActiveTexture(GL_TEXTURE0 + id);
 
     glBindTexture(GL_TEXTURE_2D, tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -127,4 +128,9 @@ void Arh_Frame_Bind(uint id){
 
 void Arh_Frame_Unbind(){
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+//MISC
+void Arh_RectPass(){
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

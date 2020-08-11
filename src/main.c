@@ -4,23 +4,27 @@
 #include <arh/win.h>
 #include <voxel/voxels.h>
 #include <game/controls.h>
-#include <arh/ui.h>
+#include <game/game_ui.h>
 #include <arh/std.h>
+void UI_Init();
 
 int main() {
-    InitWindow();
-    InitControls(window);
-    InitCamera(1280, 720);
+    Arh_Window_Init();
+    Arh_Controls_Init(window);
+    Arh_Camera_Init(1280, 720);
     
     Arh_InitResources();
+
+    UI_Init();
+    Arh_UI_Game_Init();
     InitVoxels();
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         RenderVoxels();
-
-        ControlsUpdate();
+        Arh_UI_Game_Render();
+        Arh_Controls_Update();
 
         glfwSwapBuffers(window);        
         glfwPollEvents();

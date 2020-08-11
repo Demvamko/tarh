@@ -53,3 +53,7 @@ uint Arh_Shader_Create(char* svert, char* sfrag){
     
     return prog;
 }
+
+void Arh_Shader_Bind(uint shader){
+    glUseProgram(shader);
+}

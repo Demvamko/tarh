@@ -78,7 +78,7 @@ async function Parse(fpath, repr){
 
 function Generate(repr){
     let vert = `#version ${repr.ver} \n`;
-    let frag = `#version ${repr.ver} \nout vec4 r_color; \n`;
+    let frag = `#version ${repr.ver} \nout vec4 _nar_color; \n`;
 
     let inputs = [];
     let others = [];
@@ -93,7 +93,7 @@ function Generate(repr){
     for(let i of inputs){
         vert += i.def_str;
         
-        let regex = new RegExp(`\\b${i.name}\\b`, 'g');
+        let regex = new RegExp(`(?<!\\.)\\b${i.name}\\b`, 'g');
         let rvert = repr.vert.match(regex);
         let rfrag = repr.frag.match(regex);
 
@@ -110,7 +110,7 @@ function Generate(repr){
     }
 
     for(let i of others){
-        let regex = new RegExp(`\\b${i.name}\\b`, 'g');
+        let regex = new RegExp(`\\b(?<!\\.)${i.name}\\b`, 'g');
 
         if(regex.test(repr.vert))
             vert += i.def_str;
@@ -120,13 +120,20 @@ function Generate(repr){
     }
 
     repr.vert = repr.vert.replace(/return /, 'gl_Position = ');
-    repr.frag = repr.frag.replace(/return /, 'r_color = ');
+    repr.frag = repr.frag.replace(/return /, '_nar_color = ');
 
     vert += `void main(){ \n${repr.vert} } \n`;
     frag += `void main(){ \n${repr.frag} } \n`;
 
+    for(let def in repr.defs){
+        let regex = new RegExp(`\\b${def}\\b`, 'g');
+        vert = vert.replace(regex, repr.defs[def]);
+        frag = frag.replace(regex, repr.defs[def]);
+    }
+
     vert = vert.replace(/\r/g, '');
     frag = frag.replace(/\r/g, '');
+
 
     console.log(vert);
     console.log(frag);

@@ -24,6 +24,7 @@ void Arh_Buffer_Update(Buffer* buffer, uint offset, uint size);
 void Arh_Buffer_Delete(Buffer* buffer);
 
 uint Arh_Shader_Create(char* rvert, char* rfrag);
+void Arh_Shader_Bind(uint shader);
 
 void Arh_TextureArray_Create(char* mem, uint id);
 void Arh_Texture_Create(char* mem, uint bind);
@@ -32,6 +33,8 @@ void Arh_Texture_Empty(int w, int h, uint id);
 void Arh_Frame_Create(uint w, uint h, uint id);
 void Arh_Frame_Bind(uint id);
 void Arh_Frame_Unbind();
+
+void Arh_RectPass();
 
 void Arh_Uniform_Create(void* data, uint size, uint id);
 void Arh_Uniform_Create_Arr(void* data, uint id);
