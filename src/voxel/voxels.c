@@ -34,10 +34,10 @@ static Attribute VERT_ATTRIBS[] = {
     { 0 }
 };
 
-Chunk* chunks[MAX_CHK] = { 0 };
-int keysx[MAX_CHK] = { 0 };
-int keysy[MAX_CHK] = { 0 };
-int chunklen = 0;
+static Chunk* chunks[MAX_CHK] = { 0 };
+static int keysx[MAX_CHK] = { 0 };
+static int keysy[MAX_CHK] = { 0 };
+static int chunklen = 0;
 
 static char null = 0;
 

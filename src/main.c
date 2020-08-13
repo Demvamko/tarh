@@ -15,7 +15,6 @@ int main() {
     
     Arh_InitResources();
 
-    UI_Init();
     Arh_UI_Game_Init();
     InitVoxels();
 

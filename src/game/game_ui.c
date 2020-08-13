@@ -6,33 +6,31 @@
 
 static Tag tags[5] = { 
     {
-        { 0, 0 },
-        { 1, 0.1f },
-        { 0, 0, 0, 0.8f }
+        { 0, 0, 1, 0.1f },
+        { 0, 0, 0, 200 },
+        0,
+        0,
+        { 0, 0, 1, 1 },
     },
     {
-        { 0.05f, 0.1f },
-        { 0.05f, 0.8f },
-        { 1.0f, 1.0f, 1.0f, 1.0f },
-        0
+        { 0.05f, 0.1f, 0.1f, 0.9f },
+        { 255, 255, 255, 255 },
+        0,
+        1,
     },
     {
-        { 0.15f, 0.1f },
-        { 0.05f, 0.8f },
-        { 1.0f, 1.0f, 1.0f, 1.0f },
-        2
-    }
+        { 0.15f, 0.1f, 0.2f, 0.9f },
+        { 255, 255, 255, 255 },
+        2,
+        1,
+    },
+    {0}
 };
 
-static Buffer buffer;
-
 void Arh_UI_Game_Init(){
-    UI_Tag_AddChild(tags, tags + 1);
-    UI_Tag_AddChild(tags, tags + 2);
-
-    UI_Tag_CreateBuffer(&buffer, tags, 3);
+    UI_Init(tags, 3);
 }
 
 void Arh_UI_Game_Render(){
-    UI_Render(&buffer);
+    UI_Render();
 }
