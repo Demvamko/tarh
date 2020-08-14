@@ -1,5 +1,10 @@
 extern char* resources;
 
+#define NAR_UI_COUNT 0
+#define NAR_UI_TREE (resources + 0)
+#define NAR_UI_FRAMES (resources + 0)
+#define NAR_UI_VIEWS (resources + 0)
+
 #define NAR_UI_VERT (resources + 4)
 #define NAR_UI_FRAG (resources + 385)
 #define NAR_VOXEL_ATLAS (resources + 589)

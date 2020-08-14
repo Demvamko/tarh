@@ -5,6 +5,7 @@
 #include <voxel/voxels.h>
 #include <voxel/types.h>
 #include <voxel/def.h>
+#include <game/game_ui.h>
 
 static float lastx = -1;
 static float lasty = -1;
@@ -65,8 +66,10 @@ void OnKey(GLFWwindow* window, int key, int code, int action, int mods){
 void OnMouseMove(GLFWwindow* window, double x, double y){
     int inp_mode = glfwGetInputMode(window, GLFW_CURSOR);
 
-    if(inp_mode == GLFW_CURSOR_NORMAL)
+    if(inp_mode == GLFW_CURSOR_NORMAL){
+        Arh_UI_Game_MouseMove(x, y);
         return;
+    }
 
     if(lastx == -1){
         lastx = x;
@@ -84,6 +87,13 @@ void OnMouseMove(GLFWwindow* window, double x, double y){
 }
 
 void OnMouseButton(GLFWwindow* window, int button, int action, int mods){
+    int inp_mode = glfwGetInputMode(window, GLFW_CURSOR);
+
+    if(inp_mode == GLFW_CURSOR_NORMAL){
+        Arh_UI_Game_MouseDown(lastx, lasty);
+        return;
+    }
+
     if(action != GLFW_PRESS)
         return;
 
