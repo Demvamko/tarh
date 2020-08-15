@@ -10,6 +10,8 @@
 static float lastx = -1;
 static float lasty = -1;
 
+int sel_block = BLOCK_STONE;
+
 void Arh_Controls_Init(){
     glfwSetKeyCallback(window, OnKey);
     glfwSetCursorPosCallback(window, OnMouseMove);
@@ -90,7 +92,11 @@ void OnMouseButton(GLFWwindow* window, int button, int action, int mods){
     int inp_mode = glfwGetInputMode(window, GLFW_CURSOR);
 
     if(inp_mode == GLFW_CURSOR_NORMAL){
-        Arh_UI_Game_MouseDown(lastx, lasty);
+        double x = 0;
+        double y = 0;
+        glfwGetCursorPos(window, &x, &y);
+
+        Arh_UI_Game_MouseClick(x, y);
         return;
     }
 
@@ -108,7 +114,7 @@ void OnMouseButton(GLFWwindow* window, int button, int action, int mods){
         Voxel_Set(ARGS(rayhit), BLOCK_AIR);
 
     if(button == GLFW_MOUSE_BUTTON_RIGHT)
-        Voxel_Set(ARGS(rayprev), BLOCK_STONE);
+        Voxel_Set(ARGS(rayprev), sel_block);
 
     #undef ARGS
 }

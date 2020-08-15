@@ -6,14 +6,7 @@
 #include <arh/std.h>
 #include <ext/pack_nar.h>
 
-static int ui_table[6][2] = {
-    { 0, 0 },
-    { 1, 0 },
-    { 1, 1 },
-    { 1, 1 },
-    { 0, 1 },
-    { 0, 0 }
-};
+static int ui_table[6][2] = {{ 0, 0 },{ 1, 0 },{ 1, 1 },{ 1, 1 },{ 0, 1 },{ 0, 0 }};
 
 typedef struct Vert {
     uchar pos[2];
@@ -42,9 +35,19 @@ static Node* nodes;
 static Vert* verts;
 static Buffer buffer;
 
+static void (*handlers[255])(Node* node);
+
 static Node null_node = { -1, 0 };
 
-void UI_Tag_CreateTree(char* parents, int count);
+void UI_Render(){
+    Arh_Shader_Bind(shader);
+    Arh_Frame_Bind(UI_FRAME_BIND);
+    glClear(GL_COLOR_BUFFER_BIT);
+    Arh_Buffer_Render(&buffer);
+    Arh_Frame_Unbind();
+    Arh_Shader_Bind(vpassf);
+    Arh_RectPass();
+}
 
 void UI_Init(float* mframes, View* mviews, int mcount, char* mparents){
     Arh_Frame_Create(camera.res[0], camera.res[1], UI_FRAME_BIND);
@@ -71,8 +74,14 @@ void UI_Init(float* mframes, View* mviews, int mcount, char* mparents){
 
     clients += 4;
 
+    null_node.client = clients - 4;
+
     UI_Tag_CreateTree(mparents, mcount);
     nodes->parent = &null_node;
+    nodes->view = views;
+    nodes->frame = frames;
+    nodes->client = clients;
+
     UI_Tag_CalcNodesSize(nodes);
     UI_Tag_UpdateClients(nodes);
     UI_Tag_UpdateVerts(0, mcount);
@@ -89,13 +98,17 @@ void UI_Tag_CreateTree(char* parents, int count){
         child->parent = parent;
         child->sibling = parent->child;
         parent->child = child;
+
+        child->view = views + i;
+        child->frame = frames + i * 4;
+        child->client = clients + i * 4;
     }
 }
 
 void UI_Tag_UpdateClients(Node* node){
-    float* frame = frames + (node->id * 4);
-    float* client = clients + (node->id * 4);
-    float* parent = clients + (node->parent->id * 4);
+    float* frame = node->frame;
+    float* client = node->client;
+    float* parent = node->parent->client;
 
     float w = parent[2] - parent[0];
     float h = parent[3] - parent[1];
@@ -128,8 +141,8 @@ void UI_Tag_UpdateVerts(int id, int count){
     Vert* mverts = verts + id * 6;
 
     for(int i = 0; i < count; i++){
-        float* client = clients + i * 4;
-        View* view = views + i;
+        float* client = clients + (i + id) * 4;
+        View* view = views + id + i;
 
         for(int v = 0; v < 6; v++){
             Vert* vert = mverts + i * 6 + v;
@@ -177,12 +190,6 @@ Node* UI_Tag_GetHovered(Node* node, float x, float y){
     return 0;
 }
 
-void UI_Render(){
-    Arh_Shader_Bind(shader);
-    Arh_Frame_Bind(UI_FRAME_BIND);
-    glClear(GL_COLOR_BUFFER_BIT);
-    Arh_Buffer_Render(&buffer);
-    Arh_Frame_Unbind();
-    Arh_Shader_Bind(vpassf);
-    Arh_RectPass();
+Node* UI_Tag_Get(int id){
+    return nodes + id;
 }

@@ -1,16 +1,13 @@
 extern char* resources;
 
-#define NAR_UI_COUNT 0
-#define NAR_UI_TREE (resources + 0)
-#define NAR_UI_FRAMES (resources + 0)
-#define NAR_UI_VIEWS (resources + 0)
-
 #define NAR_UI_VERT (resources + 4)
 #define NAR_UI_FRAG (resources + 385)
-#define NAR_VOXEL_ATLAS (resources + 589)
-#define NAR_VOXEL_ATLAS_UVS (resources + 18161)
-#define NAR_VPASS_VERT (resources + 18485)
-#define NAR_VPASS_FRAG (resources + 18785)
-#define NAR_VOXEL_VERT (resources + 18949)
-#define NAR_VOXEL_FRAG (resources + 19679)
-#define NAR_VOXEL_ARR (resources + 19921)
+#define NAR_CROSSHAIR_VERT (resources + 589)
+#define NAR_CROSSHAIR_FRAG (resources + 681)
+#define NAR_VOXEL_ATLAS (resources + 772)
+#define NAR_VOXEL_ATLAS_UVS (resources + 18344)
+#define NAR_VPASS_VERT (resources + 18668)
+#define NAR_VPASS_FRAG (resources + 18968)
+#define NAR_VOXEL_VERT (resources + 19132)
+#define NAR_VOXEL_FRAG (resources + 19862)
+#define NAR_VOXEL_ARR (resources + 20104)

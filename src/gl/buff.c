@@ -42,7 +42,7 @@ void Arh_Buffer_Render(Buffer* buffer){
 }
 
 void Arh_Buffer_Update(Buffer* buffer, uint offset, uint size){
-    glNamedBufferSubData(buffer->id, offset, size, buffer->data);
+    glNamedBufferSubData(buffer->id, offset, size, ((char*)buffer->data) + offset);
 }
 
 void Arh_Buffer_Delete(Buffer* buffer){

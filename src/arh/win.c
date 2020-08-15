@@ -32,8 +32,9 @@ void Arh_Window_Init(){
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(GLErrorCallback, 0);
 
+    glEnable(GL_PROGRAM_POINT_SIZE);
+    
     glClearColor(0, 0, 0, 0);
 
     glLineWidth(1);
-    glPointSize(4.0f);
 }
