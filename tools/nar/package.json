@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@enable3d/ammo-on-nodejs": "^0.19.1",
     "canvas": "^2.6.1",
-    "glob": "^7.1.6"
+    "enable3d": "^0.19.1",
+    "glob": "^7.1.6",
+    "three": "^0.119.1",
+    "three-fbx-loader": "^1.0.3"
   }
 }

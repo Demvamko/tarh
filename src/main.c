@@ -8,7 +8,9 @@
 #include <game/controls.h>
 #include <game/game_ui.h>
 #include <arh/std.h>
-void UI_Init();
+
+void Experimenting();
+void ExperimentRender();
 
 int main() {
     Arh_Window_Init();
@@ -22,11 +24,15 @@ int main() {
     
     int crosshair = Arh_Shader_Create(NAR_CROSSHAIR_VERT, NAR_CROSSHAIR_FRAG);
 
+    Experimenting();
+
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Arh_Shader_Bind(crosshair);
         glDrawArrays(GL_POINTS, 0, 1);
+
+        ExperimentRender();
 
         RenderVoxels();
         Arh_UI_Game_Render();
