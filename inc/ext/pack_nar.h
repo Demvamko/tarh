@@ -3,7 +3,6 @@ extern char* resources;
 #define NAR_MODEL_VERT (resources + 4)
 #define NAR_MODEL_FRAG (resources + 421)
 #define NAR_UI_VERT (resources + 512)
-#define NAR_UI_VERT (resources + 514)
 #define NAR_UI_FRAG (resources + 893)
 #define NAR_CROSSHAIR_VERT (resources + 1097)
 #define NAR_CROSSHAIR_FRAG (resources + 1189)
@@ -13,4 +12,4 @@ extern char* resources;
 #define NAR_VPASS_FRAG (resources + 19476)
 #define NAR_VOXEL_VERT (resources + 19640)
 #define NAR_VOXEL_FRAG (resources + 20370)
-#define NAR_VOXEL_ARR (resources + 20612)
+#define NAR_VOXEL_ARR (resources + 20650)

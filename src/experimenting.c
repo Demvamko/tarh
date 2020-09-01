@@ -4,6 +4,7 @@
 #include <lib/glew.h>
 #include <arh/gl.h>
 #include <ext/pack_nar.h>
+#include <arh/std.h>
 
 typedef struct Vert {
     float pos[3];
@@ -99,21 +100,11 @@ void Experimenting(){
 
     }
 
-    for(int a = 0; a < data->animations_count; a++){
-        cgltf_animation* anim = data->animations + a;
-
-
-
-        for(int i = 0; i < anim->channels_count; i++){
-            cgltf_animation_channel* chan = anim->channels + i;
-
-            
-        }
-    }
-
     arrlen(verts) = arrmax(verts);
 
     int format = Arh_Attrib_Create(VERT_ATTR);
     Arh_Buffer_Create(&buffer, GL_TRIANGLES, verts, format);
     shader = Arh_Shader_Create(NAR_MODEL_VERT, NAR_MODEL_FRAG);
+
+        
 }

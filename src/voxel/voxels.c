@@ -12,8 +12,25 @@
 #define CHUNK_UBO_BIND 1
 #define CHUNK_TEX_BIND 1
 
+typedef struct Node{
+    float g;
+    float h;
+    float f;
+    
+    char x;
+    char y;
+    char z;
+    char px;
+    char py;
+    char pz;
+
+    char closed;
+    char walkable;
+} Node;
+
 struct Chunk{
     char blocks[CHK_SZ];
+    Node nodes[CHK_SZ];
     int x;
     int y;
     struct Chunk* sides[6];
@@ -224,10 +241,8 @@ void Chunk_RefreshMesh(Chunk* chunk){
                 const int* rect = cube_rects[s][v];
                 const int* uv = uv_table[s][v];
 
-                ushort* uvs = (ushort*)NAR_VOXEL_ATLAS_UVS + sizeof(short) * 2 * voxels[block].image;
-
                 FOR(3) vert->pos[iter] = rect[iter] + coord[iter];
-                vert->uv = (voxels[block].image << 2) + (uv[1] * 2) + uv[0];
+                vert->uv = (voxels[block].image << 2) + (uv[1] << 1) + uv[0];
 
                 //CALCULATE AMBIENT OCCLUSION AT VERTEX
                 char light = 16;

@@ -71,7 +71,7 @@ void* arralloc(uint count, uint size){
 }
 
 void* arrgrow(void* arr){
-    if(arrlen(arr) + arrelem(arr) * 2 < arrmax(arr))
+    if(arrlen(arr) + arrelem(arr) * 3 < arrmax(arr))
         return arr;
 
     arrmax(arr) *= 2;

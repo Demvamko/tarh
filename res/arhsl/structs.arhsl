@@ -23,6 +23,10 @@ ubo 2 {
     int uv;
 } uirect;
 
+ubo 3 {
+    mat4x4 matrices[8];
+} animations;
+
 uni 0 sampler2D ui_atlas;
 uni 1 sampler2DArray voxel_atlas;
 uni 2 sampler2D __free__;

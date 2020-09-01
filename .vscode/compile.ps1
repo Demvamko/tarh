@@ -1,5 +1,7 @@
 cp "C:\Program Files (x86)\GLFW\bin\glfw3.dll" ./bin/glfw3.dll
 
+node ./tools/nar/main.js
+
 cl `
 /W3 `
 /wd4312 `

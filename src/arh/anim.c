@@ -1,25 +1,54 @@
-#include <cglm.h>
+// #include <arh/gl.h>
+// #include <cglm.h>
+// #include <lib/glew.h>
 
-typedef struct Track {
-    int* times;
-    float* quats;
-    int len;
-} Track;
+// #define ANIM_UBO 3
+// #define ANIM_UBO_SIZE sizeof(float) * 16 * 8
 
-void UpdateRotations(Track* track, float* rotation, int time){
-    int key = 0;
+// float matrices[16][8] = { 0 };
 
-    int prev = track->times[0];
-    int curr = track->times[1];
+// typedef struct Track {
+//     int* times;
+//     float* quats;
+//     int len;
+//     int uniform;
+// } Track;
 
-    time = time % track->times[track->len - 1];
+// typedef struct Anim {
+//     float duration;
+//     float start;
+//     float end;
 
-    for(key = 1; key < track->len; key++)
-        if(track->times[key - 1] < time && track->times[key] > time)
-            break;
+//     Track* tracks;
+//     uint count;
+// } Anim;
 
-    rotation[0] = track->quats[key + 0];
-    rotation[1] = track->quats[key + 1];
-    rotation[2] = track->quats[key + 2];
-    rotation[3] = track->quats[key + 3];
-}
+// static Anim* anims;
+
+// void Arh_Anim_Init(){
+//     Arh_Uniform_Create(matrices, ANIM_UBO_SIZE, ANIM_UBO);
+//     anims = arralloc(32, sizeof(Anim));
+// }
+
+// uint Arh_Anim_Update(uint id, float t){
+//     Anim anim = anims[id];
+
+//     if(anim.end < t)
+//         return 0;
+
+//     float dt = t - anim.start;
+
+//     for(int i = 0; i < anim.count; i++){
+//         Track* track = anim.tracks + i;
+//         glm_quat_mat4(track->quats + (int)dt, matrices[track->uniform]);
+//     }
+
+//     Arh_Uniform_Update(ANIM_UBO, 0, ANIM_UBO_SIZE);
+
+//     return 1;
+// }
+
+// uint Arh_Anim_Create(uint id, float t){
+//     arrlen(anims) = (arrlen(anims) + 1) % arrmax(anims);
+//     return arrlen(anims);
+// }

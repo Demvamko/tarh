@@ -18,5 +18,4 @@ void* arrgrow(void* arr);
 #define arrnext(arr) ((((char*)arr) + arrlen(arr)))
 #define arrcount(arr) (arrlen(arr) / arrelem(arr))
 
-
 //pack --type=shader --name=MODEL --path=./res/arhsl/model.arhsl
