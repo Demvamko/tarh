@@ -6,7 +6,7 @@
 GLFWwindow* window;
 
 void __stdcall GLErrorCallback(uint stc, uint type, uint id, uint sev, int len, const char* msg, const void* param){
-    printf("%s", msg);
+    printf("%s\n", msg);
 }
 
 void Arh_Window_Init(){

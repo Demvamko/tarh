@@ -9,8 +9,8 @@
 #include <game/game_ui.h>
 #include <arh/std.h>
 
-void Experimenting();
-void ExperimentRender();
+void PCCube_Init();
+void PCCube_Render();
 
 int main() {
     Arh_Window_Init();
@@ -24,17 +24,17 @@ int main() {
     
     int crosshair = Arh_Shader_Create(NAR_CROSSHAIR_VERT, NAR_CROSSHAIR_FRAG);
 
-    Experimenting();
+    PCCube_Init();
 
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Arh_Shader_Bind(crosshair);
-        glDrawArrays(GL_POINTS, 0, 1);
-
-        ExperimentRender();
+        // Arh_Shader_Bind(crosshair);
+        // glDrawArrays(GL_POINTS, 0, 1);
 
         RenderVoxels();
+        PCCube_Render();
+
         Arh_UI_Game_Render();
 
         Arh_Controls_Update();

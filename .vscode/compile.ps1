@@ -1,4 +1,4 @@
-cp "C:\Program Files (x86)\GLFW\bin\glfw3.dll" ./bin/glfw3.dll
+cp "C:\Users\Demi\Desktop\glfw-3.3.2.bin.WIN64\lib-vc2019\glfw3.dll" ./bin/glfw3.dll
 
 node ./tools/nar/main.js
 
@@ -26,9 +26,8 @@ src\\voxel\\*.c `
 src\\gl\\*.c `
 glfw3dll.lib `
 opengl32.lib `
-freetype.lib `
 /FI arh\\arh.h `
 /link `
-/LIBPATH:"C:\Users\JSGuru\Desktop\Files\projects\tarh\dep\freetype\objs\x64\Debug" `
 /LIBPATH:"C:\Program Files (x86)\GLFW\lib" `
+/LIBPATH:"C:\Users\Demi\Desktop\glfw-3.3.2.bin.WIN64\lib-vc2019\" `
 /LIBPATH:".\\lib";

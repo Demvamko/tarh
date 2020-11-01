@@ -31,7 +31,9 @@ void Arh_Buffer_Create(Buffer* buffer, uint type, void* data, uint vao){
     buffer->stride = arrelem(data);
 
     glGenBuffers(1, &(buffer->id));
+    glBindBuffer(GL_ARRAY_BUFFER, buffer->id);
     glNamedBufferData(buffer->id, arrlen(buffer->data), buffer->data, GL_STATIC_DRAW);
+    glGetError();
 }
 
 void Arh_Buffer_Render(Buffer* buffer){

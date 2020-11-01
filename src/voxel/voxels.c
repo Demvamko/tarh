@@ -207,8 +207,12 @@ void Chunk_Generate(Chunk* c){
 
         c->blocks[id] = BLOCK_AIR;
 
+        // if(y < 5 + simplex * 4)
+        //     c->blocks[id] = y < (5 + simplex2 * 4) ? BLOCK_DIRT : BLOCK_GRASS;
+
+    
         if(y < 5 + simplex * 4)
-            c->blocks[id] = y < (5 + simplex2 * 4) ? BLOCK_DIRT : BLOCK_GRASS;
+            c->blocks[id] = BLOCK_STONE;
     }
 }
 

@@ -45,6 +45,7 @@ static int crosshair = 0;
 void Arh_UI_Game_Init(){
     UI_Init(frames, views, 5, tree);
 
+    glGetError();
     for(int i = 0; i < 4; i++){
         Node* node = UI_Tag_Get(i + 1);
         node->frame[0] = 0.02f + i * 0.07f;
@@ -66,8 +67,11 @@ void Arh_UI_Game_Init(){
     }
 
     UI_Tag_UpdateClients(UI_Tag_Get(0));
+    glGetError();
     UI_Tag_UpdateBuffer(0, 5);
+    glGetError();
 
+    glGetError();
 }
 
 void Arh_UI_Game_Render(){
