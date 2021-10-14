@@ -1,4 +1,4 @@
-#include <lib/glew.h>
+#include <gl/glew.h>
 #include <math.h>
 #include <stdlib.h>
 #include <arh/gl.h>

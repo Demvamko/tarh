@@ -1,4 +1,5 @@
-ubo 0 {
+
+camera {
     ivec2 res;
 
     vec3 pos;
@@ -10,25 +11,25 @@ ubo 0 {
     
     mat4x4 view;
     mat4x4 proj;
-} camera;
+};
 
-ubo 1 {
+chunk {
     ivec2 cpos;
-} chunk;
+};
 
-ubo 2 {
+uirect {
     vec2 pos;
     vec2 size;
     vec4 color;
     int uv;
-} uirect;
+};
 
-ubo 3 {
+animations {
     mat4x4 matrices[8];
-} animations;
+};
 
-uni 0 sampler2D ui_atlas;
-uni 1 sampler2DArray voxel_atlas;
-uni 2 sampler2D __free__;
-uni 3 sampler2D __free__;
-uni 4 sampler2D ui_frame;
+glob {
+    sampler2D           ui_atlas;
+    sampler2D           ui_frame;
+    sampler2DArray      voxel_atlas;
+}

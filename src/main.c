@@ -1,5 +1,5 @@
-#include <lib/glew.h>
-#include <glfw3.h>
+#include <gl/glew.h>
+#include <GLFW/glfw3.h>
 #include <arh/cam.h>
 #include <arh/win.h>
 #include <arh/gl.h>
@@ -29,11 +29,11 @@ int main() {
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Arh_Shader_Bind(crosshair);
-        // glDrawArrays(GL_POINTS, 0, 1);
-
         RenderVoxels();
         PCCube_Render();
+
+        Arh_Shader_Bind(crosshair);
+        glDrawArrays(GL_POINTS, 0, 1);
 
         Arh_UI_Game_Render();
 

@@ -1,4 +1,4 @@
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 #include <arh/cam.h>
 #include <arh/win.h>
 #include <game/controls.h>

@@ -1,5 +1,5 @@
 #include <arh/gl.h>
-#include <lib/glew.h>
+#include <gl/glew.h>
 #include <stdio.h>
 
 static int CompileFailed(uint shade){

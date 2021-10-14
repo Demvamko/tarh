@@ -59,7 +59,7 @@ function Command(line){
         outputs.push(out);
     }
 
-    console.log(outputs);
+    // console.log(outputs);
 
     let bin = fs.createWriteStream('./res/bin/pack_nar.bin');
     let head = fs.createWriteStream('./inc/ext/pack_nar.h');

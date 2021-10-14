@@ -6,7 +6,7 @@
 #include <arh/cam.h>
 #include <voxel/types.h>
 #include <ext/pack_nar.h>
-#include <lib/glew.h>
+#include <gl/glew.h>
 
 static float frames[8 * 4] = { 0, 0, 1, 0.1f, 0 };
 static View views[8] = {{{ 0, 0, 0, 200 }, 0 }, { 0 }};

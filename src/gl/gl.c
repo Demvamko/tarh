@@ -1,6 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <lib/stb_image.h>
-#include <lib/glew.h>
+#include <gl/glew.h>
 #include <arh/gl.h>
 
 //UNIFORMS

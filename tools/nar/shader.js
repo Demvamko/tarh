@@ -135,8 +135,8 @@ function Generate(repr){
     frag = frag.replace(/\r/g, '');
 
 
-    console.log(vert);
-    console.log(frag);
+    // console.log(vert);
+    // console.log(frag);
 
     return { 
         [`${repr.name}_VERT`]: Buffer.from(vert), 

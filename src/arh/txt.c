@@ -1,6 +1,6 @@
 // #include <ft2build.h>
 // #include FT_FREETYPE_H
-// #include <glew.h>
+// #include <gl/glew.h>
 // #include <arhgl.h>
 // #include <arhcam.h>
 // #include <ui.h>

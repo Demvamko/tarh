@@ -1,5 +1,5 @@
-#include <lib/glew.h>
-#include <glfw3.h>
+#include <gl/glew.h>
+#include <GLFW/glfw3.h>
 #include <arh/win.h>
 #include <stdio.h>
 

@@ -6,12 +6,10 @@ let processors = {
 }
 
 function Process(cmd){
-    console.log(cmd);
     return processors[cmd.process](cmd);
 }
 
 async function Voxel(cmd){
-    console.log(cmd);
     cmd.size = Number(cmd.size);
 
     let transforms = [
